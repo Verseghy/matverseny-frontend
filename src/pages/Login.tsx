@@ -14,6 +14,9 @@ const LoginPage: Component = () => {
   const [emailError, setEmailError] = createSignal('');
   const [passwordError, setPasswordError] = createSignal('');
 
+  const [emailDirty, setEmailDirty] = createSignal(false)
+  const [passwordDirty, setPasswordDirty] = createSignal(false)
+
   let emailInput: HTMLInputElement
   let passwordInput: HTMLInputElement
 
@@ -47,6 +50,10 @@ const LoginPage: Component = () => {
 
   const submitForm = async (e: Event) => {
     e.preventDefault()
+
+    setEmailDirty(true)
+    setPasswordDirty(true)
+
     const value = await validate()
     // TODO: send login request
     console.log(value)
@@ -66,8 +73,12 @@ const LoginPage: Component = () => {
             display="Email"
             type="text"
             class={styles.field}
-            errorMessage={emailError()}
+            errorMessage={emailDirty() ? emailError() : ''}
             ref={emailInput!}
+            onBlur={() => {
+              setEmailDirty(true)
+              validate()
+            }}
             onInput={validate}
           />
           <FormField
@@ -75,8 +86,12 @@ const LoginPage: Component = () => {
             display="Jelszó"
             type="password"
             class={styles.field}
-            errorMessage={passwordError()}
+            errorMessage={passwordDirty() ? passwordError() : ''}
             ref={passwordInput!}
+            onBlur={() => {
+              setPasswordDirty(true)
+              validate()
+            }}
             onInput={validate}
           />
           <div class={styles.controls}>

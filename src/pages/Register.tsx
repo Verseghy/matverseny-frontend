@@ -30,6 +30,13 @@ const RegisterPage: Component = () => {
   const [schoolError, setSchoolError] = createSignal('');
   const [classError, setClassError] = createSignal('');
 
+  const [emailDirty, setEmailDirty] = createSignal(false);
+  const [passwordDirty, setPasswordDirty] = createSignal(false);
+  const [passwordReDirty, setPasswordReDirty] = createSignal(false);
+  const [nameDirty, setNameDirty] = createSignal(false);
+  const [schoolDirty, setSchoolDirty] = createSignal(false);
+  const [classDirty, setClassDirty] = createSignal(false);
+
   let emailInput: HTMLInputElement
   let passwordInput: HTMLInputElement
   let passwordReInput: HTMLInputElement
@@ -89,6 +96,14 @@ const RegisterPage: Component = () => {
 
   const submitForm = async (e: Event) => {
     e.preventDefault()
+
+    setEmailDirty(true)
+    setPasswordDirty(true)
+    setPasswordReDirty(true)
+    setNameDirty(true)
+    setSchoolDirty(true)
+    setClassDirty(true)
+
     const value = await validate()
     // TODO: send register request
     console.log(value)
@@ -103,8 +118,12 @@ const RegisterPage: Component = () => {
             name="email"
             display="Email"
             class={styles.field}
-            errorMessage={emailError()}
+            errorMessage={emailDirty() ? emailError() : ''}
             ref={emailInput!}
+            onBlur={() => {
+              setEmailDirty(true)
+              validate()
+            }}
             onInput={validate}
           />
           <FormField
@@ -112,8 +131,12 @@ const RegisterPage: Component = () => {
             display="Jelszó"
             type="password"
             class={styles.field}
-            errorMessage={passwordError()}
+            errorMessage={passwordDirty() ? passwordError() : ''}
             ref={passwordInput!}
+            onBlur={() => {
+              setPasswordDirty(true)
+              validate()
+            }}
             onInput={validate}
           />
           <FormField
@@ -121,24 +144,36 @@ const RegisterPage: Component = () => {
             display="Jelszó ismétlés"
             type="password"
             class={styles.field}
-            errorMessage={passwordReError()}
+            errorMessage={passwordReDirty() ? passwordReError() : ''}
             ref={passwordReInput!}
+            onBlur={() => {
+              setPasswordReDirty(true)
+              validate()
+            }}
             onInput={validate}
           />
           <FormField
             name="name"
             display="Név"
             class={styles.field}
-            errorMessage={nameError()}
+            errorMessage={nameDirty() ? nameError() : ''}
             ref={nameInput!}
+            onBlur={() => {
+              setNameDirty(true)
+              validate()
+            }}
             onInput={validate}
           />
           <FormField
             name="school"
             display="Iskola"
             class={styles.field}
-            errorMessage={schoolError()}
+            errorMessage={schoolDirty() ? schoolError() : ''}
             ref={schoolInput!}
+            onBlur={() => {
+              setSchoolDirty(true)
+              validate()
+            }}
             onInput={validate}
           />
           <FormField
@@ -146,8 +181,12 @@ const RegisterPage: Component = () => {
             display="Évfolyam"
             type="number"
             class={styles.field}
-            errorMessage={classError()}
+            errorMessage={classDirty() ? classError() : ''}
             ref={classInput!}
+            onBlur={() => {
+              setClassDirty(true)
+              validate()
+            }}
             onInput={validate}
           />
           <div class={styles.controls}>
