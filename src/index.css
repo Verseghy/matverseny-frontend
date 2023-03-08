@@ -1,0 +1,33 @@
+@import-sanitize;
+
+* {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 10px;
+}
+
+body {
+  font-size: 1.6rem;
+  font-family: 'Roboto', sans-serif;
+  color: var(--text-color);
+  background: var(--background);
+}
+
+html,
+body,
+#root,
+main {
+  width: 100%;
+  min-height: 100vh;
+  overflow: auto;
+}
+
+::selection {
+  background: var(--primary);
+  color: var(--text-on-primary);
+}
+

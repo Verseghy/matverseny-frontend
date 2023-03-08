@@ -1,0 +1,55 @@
+.button {
+  font-size: 1.4rem;
+  line-height: 3.6rem;
+  padding: 0 1.6rem;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  background: var(--gray);
+  text-decoration: none;
+  color: var(--text-on-gray);
+  display: inline-block;
+  text-align: center;
+
+  &.block {
+    display: block;
+    width: 100%;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem var(--outline);
+  }
+
+  &.disabled,
+  &:disabled {
+    cursor: auto;
+    color: var(--text-on-gray-disabled);
+    background: var(--gray-disabled);
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  &.primary {
+    color: var(--text-on-primary);
+    background: var(--primary);
+
+    &.disabled,
+    &:disabled {
+      color: var(--text-on-primary-disabled);
+      background: var(--primary-disabled);
+    }
+  }
+
+  &.danger {
+    color: var(--text-on-red);
+    background: var(--red);
+
+    &.disabled,
+    &:disabled {
+      color: var(--text-on-red-disabled);
+      background: var(--red-disabled);
+    }
+  }
+}

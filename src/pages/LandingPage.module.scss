@@ -1,0 +1,55 @@
+// @import 'utils';
+
+.container {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 100vh;
+
+  // @include mobile {
+  //   padding: 0 1.6rem;
+  // }
+}
+
+.card {
+  width: min(100%, 55ch);
+
+  h1 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 3rem;
+
+    span {
+      color: var(--primary);
+    }
+  }
+
+  p + p {
+    margin-top: 1.5rem;
+  }
+
+  .controls {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .link {
+    span {
+      display: flex;
+      align-items: center;
+    }
+
+    .icon {
+      color: var(--primary);
+    }
+
+    a {
+      margin-left: 1.6rem;
+      color: var(--text-color);
+    }
+  }
+}
