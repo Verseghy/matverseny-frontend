@@ -17,8 +17,7 @@ const LoginPage: Component = () => {
   let emailInput: HTMLInputElement
   let passwordInput: HTMLInputElement
 
-  const submitForm = async (e: Event) => {
-    e.preventDefault()
+  const validate = async (): Promise<any> => {
     try {
       const value = await schema.validate(
         {
@@ -31,9 +30,7 @@ const LoginPage: Component = () => {
       )
       setEmailError('')
       setPasswordError('')
-
-      // TODO: send login request
-      console.log(value)
+      return value
     } catch (e: any) {
       if (!(e instanceof Yup.ValidationError)) return
       setEmailError('')
@@ -46,6 +43,13 @@ const LoginPage: Component = () => {
         }
       }
     }
+  }
+
+  const submitForm = async (e: Event) => {
+    e.preventDefault()
+    const value = await validate()
+    // TODO: send login request
+    console.log(value)
   }
 
   return (
@@ -64,6 +68,7 @@ const LoginPage: Component = () => {
             class={styles.field}
             errorMessage={emailError()}
             ref={emailInput!}
+            onInput={validate}
           />
           <FormField
             name="password"
@@ -72,6 +77,7 @@ const LoginPage: Component = () => {
             class={styles.field}
             errorMessage={passwordError()}
             ref={passwordInput!}
+            onInput={validate}
           />
           <div class={styles.controls}>
             <Button href="/register" block>
