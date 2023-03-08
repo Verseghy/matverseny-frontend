@@ -1,4 +1,4 @@
-import { Component, createSignal, Show } from 'solid-js'
+import { Component, createEffect, createSignal, Show } from 'solid-js'
 import styles from './Switch.module.scss'
 
 export interface SwitchProps {
@@ -10,7 +10,12 @@ export interface SwitchProps {
 const Switch: Component<SwitchProps> = (props) => {
   const [value, setValue] = createSignal(props.value ?? false);
 
-  // TODO: this may have incorrect reactivity
+  createEffect(() => {
+    if (props.value) {
+      setValue(props.value)
+    }
+  })
+
   const handleClick = () => {
     setValue(!value())
 
