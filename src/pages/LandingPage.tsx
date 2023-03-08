@@ -46,7 +46,6 @@ const LandingPage: Component = () => {
           <Switch
             value={theme() === 'dark'}
             onClick={(value: boolean) => {
-              console.log('asd', value)
               setTheme(value ? 'dark' : 'light')
             }}
           >
