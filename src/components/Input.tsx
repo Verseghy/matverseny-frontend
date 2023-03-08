@@ -8,7 +8,7 @@ export interface InputProps extends JSX.InputHTMLAttributes<HTMLInputElement> {
 
 
 const Input: Component<InputProps> = (props) => {
-  const [local, rest] = splitProps(props, ['block', 'error', 'class', 'value'])
+  const [local, rest] = splitProps(props, ['block', 'error', 'class'])
 
   return (
     <input
