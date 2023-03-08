@@ -1,0 +1,26 @@
+.input {
+  --border-color: var(--gray);
+
+  padding: 0.8rem 1.2rem;
+  border-radius: 0.6rem;
+  display: inline-block;
+  background: none;
+  color: var(--text-color);
+  border: 0.1rem solid var(--border-color);
+  box-sizing: border-box;
+
+  &:focus {
+    --border-color: var(--primary);
+    box-shadow: 0 0 0 0.1rem var(--border-color);
+    outline: 0;
+  }
+
+  &.block {
+    display: block;
+    width: 100%;
+  }
+
+  &.error {
+    --border-color: var(--red);
+  }
+}
