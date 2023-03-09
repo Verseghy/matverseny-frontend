@@ -14,7 +14,7 @@ export class AuthService {
             body: JSON.stringify({
                 email,
                 password
-            }) as any
+            })
         }).pipe(
             switchMap(resp => resp.json()),
             map(r => {
@@ -37,7 +37,7 @@ export class AuthService {
                 email,
                 password,
                 name
-            }) as any
+            })
         }).pipe(
             switchMap(resp => resp.json()),
             switchMap(r => {
