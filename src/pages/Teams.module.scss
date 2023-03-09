@@ -1,0 +1,183 @@
+// @import 'utils';
+
+.container {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 100vh;
+
+  // @include mobile {
+  //   padding: 0 1.6rem;
+  // }
+}
+
+.card {
+  width: min(100%, 49ch);
+
+  .section {
+    text-align: center;
+
+    .join {
+      display: inline-flex;
+      gap: 1.6rem;
+
+      // @include mobile {
+      //   flex-direction: column;
+      // }
+    }
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    margin: 3.2rem 0;
+
+    &::before,
+    &::after {
+      content: '';
+      display: block;
+      height: 2px;
+      width: 100%;
+      background: var(--gray);
+    }
+
+    span {
+      white-space: nowrap;
+      padding: 0 2rem;
+    }
+  }
+
+  h1 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 3rem;
+  }
+
+  .errorMessage {
+    margin-bottom: 3.2rem;
+  }
+
+  .nameInput {
+    width: 100%;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 1.6rem;
+    margin-top: 3.2rem;
+  }
+
+  .fieldError {
+    font-size: 1.4rem;
+    color: var(--red);
+  }
+
+  .code {
+    width: 10rem;
+    text-align: center;
+  }
+
+  .members {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    border-bottom: 1px solid var(--gray);
+    display: block;
+    margin-top: 3.2rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .member {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+
+    .memberName {
+      display: flex;
+      align-items: center;
+
+      .star {
+        color: var(--yellow);
+        margin-left: 0.6rem;
+      }
+    }
+
+    .actions {
+      display: flex;
+      gap: 1.2rem;
+    }
+  }
+
+  .codeContainer {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    margin: 3.2rem auto 0;
+
+    // @include mobile {
+    //   flex-direction: column;
+    // }
+
+    .codeActions {
+      display: flex;
+      gap: 1.6rem;
+    }
+  }
+
+  .teamOperations {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    margin: 1.6rem auto 0;
+    align-items: flex-start;
+
+    // @include mobile {
+    //   flex-direction: column;
+    // }
+  }
+
+  .renameTeam {
+    display: flex;
+    gap: 1.6rem;
+    margin: 1.6rem auto 0;
+    align-items: flex-start;
+
+    label {
+      flex: 1;
+
+      // @include mobile {
+      //   width: 100%;
+      // }
+    }
+
+    .renameButtons {
+      display: flex;
+      gap: 1.6rem;
+
+      // @include mobile {
+      //   width: 100%;
+      //
+      //   .submitRename {
+      //     flex: 1;
+      //   }
+      // }
+    }
+
+    // @include mobile {
+    //   flex-direction: column;
+    // }
+  }
+
+  .buttonsContainer {
+    display: flex;
+    gap: 1.6rem;
+    margin-top: 3.2rem;
+
+    // @include mobile {
+    //   flex-direction: column;
+    // }
+  }
+}
+
