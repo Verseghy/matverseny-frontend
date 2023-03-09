@@ -1,3 +1,4 @@
+import { useNavigate } from "@solidjs/router"
 import { firstValueFrom } from "rxjs"
 import { Component, createSignal } from "solid-js"
 import * as Yup from 'yup'
@@ -25,6 +26,8 @@ const LoginPage: Component = () => {
 
   let emailInput: HTMLInputElement
   let passwordInput: HTMLInputElement
+
+  const navigate = useNavigate();
 
   const validate = async (): Promise<any> => {
     try {
@@ -67,6 +70,8 @@ const LoginPage: Component = () => {
       const login$ = authService.login(value)
       try {
         await firstValueFrom(login$)
+
+        navigate('/teams')
       } catch (e: any) {
         setErrorCode(e.code)
       }
