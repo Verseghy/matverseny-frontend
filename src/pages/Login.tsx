@@ -71,7 +71,7 @@ const LoginPage: Component = () => {
       try {
         await firstValueFrom(login$)
 
-        navigate('/teams')
+        navigate('/team')
       } catch (e: any) {
         setErrorCode(e.code)
       }
