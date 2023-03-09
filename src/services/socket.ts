@@ -17,6 +17,11 @@ export interface TeamInfo {
     members: TeamMember[]
 }
 
+export interface TimeInfo {
+    start_time: Date
+    end_time: Date
+}
+
 export class SocketServiceSingleton {
     constructor(private baseURL: string) {
     }
@@ -27,5 +32,9 @@ export class SocketServiceSingleton {
     // if teamInfo completes we got kicked
     teamInfo(): Observable<TeamInfo | null> {
         return of(null)
+    }
+
+    time(): Observable<TimeInfo> {
+        return of({start_time: new Date(), end_time: new Date()})
     }
 }

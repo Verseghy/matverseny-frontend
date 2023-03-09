@@ -29,7 +29,7 @@ export class AuthService {
         )
     }
 
-    register({email, password, name, school, klass}: {email: string, password: string, name: string, school: string, klass: MemberClass}): Observable<unknown> {
+    register({email, password, name, school, klass}: {email: string, password: string, name: string, school: string, klass: MemberClass}): Observable<void> {
         return fromFetch(`${this.baseURLIAM}/v1/users/register`, {
             ...baseFetchRequest,
             method: "POST",
@@ -62,7 +62,6 @@ export class AuthService {
                             const r = await resp.json()
                             throw {code: r.code}
                         }
-                        return "OK"
                     })
                 )
             })
