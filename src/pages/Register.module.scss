@@ -1,0 +1,39 @@
+// @import 'utils';
+
+.container {
+  display: grid;
+  place-items: center;
+  min-width: 100%;
+  min-height: 100vh;
+
+  // @include mobile {
+  //   padding: 0 1.6rem;
+  // }
+
+  .card {
+    width: min(100%, 45ch);
+
+    h1 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+
+    .field {
+      margin-top: 1.6rem;
+    }
+
+    .controls {
+      display: flex;
+      margin-top: 3.2rem;
+      gap: 1.6rem;
+
+      .button {
+        width: 100%;
+      }
+    }
+  }
+}
+
