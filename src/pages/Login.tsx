@@ -72,6 +72,7 @@ const LoginPage: Component = () => {
             name="email"
             display="Email"
             type="text"
+            autofocus
             class={styles.field}
             errorMessage={emailDirty() ? emailError() : ''}
             ref={emailInput!}
