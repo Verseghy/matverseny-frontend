@@ -125,7 +125,7 @@ const RegisterPage: Component = () => {
       try {
         await firstValueFrom(register$)
 
-        navigate('/login')
+        navigate('/team')
       } catch (e: any) {
         setErrorCode(e.code)
       }
