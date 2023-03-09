@@ -7,7 +7,6 @@
   background: none;
   color: var(--text-color);
   border: 0.1rem solid var(--border-color);
-  box-sizing: border-box;
 
   &:focus {
     --border-color: var(--primary);

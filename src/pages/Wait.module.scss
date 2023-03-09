@@ -1,4 +1,4 @@
-// @import 'utils';
+@import 'src/utils';
 
 .container {
   display: grid;
@@ -7,9 +7,9 @@
   min-height: 100vh;
   text-align: center;
 
-  // @include mobile {
-  //   padding: 0 1.6rem;
-  // }
+  @include mobile {
+    padding: 0 1.6rem;
+  }
 
   h1 {
     font-family: 'Inter', sans-serif;
@@ -24,9 +24,9 @@
     line-height: 1;
     margin-bottom: 1.6rem;
 
-    // @include mobile {
-    //   font-size: 6.5rem;
-    // }
+    @include mobile {
+      font-size: 6.5rem;
+    }
   }
 }
 

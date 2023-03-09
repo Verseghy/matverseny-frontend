@@ -1,4 +1,4 @@
-// @import 'utils';
+@import 'src/utils';
 
 .card {
   padding: 3.2rem;
@@ -8,11 +8,11 @@
   display: inline-block;
   background-color: var(--background-card);
 
-  // @include mobile {
-  //   box-shadow: none;
-  //   border-radius: 0;
-  //   margin: 0;
-  //   padding-right: 0;
-  //   padding-left: 0;
-  // }
+  @include mobile {
+    box-shadow: none;
+    border-radius: 0;
+    margin: 0;
+    padding-right: 0;
+    padding-left: 0;
+  }
 }

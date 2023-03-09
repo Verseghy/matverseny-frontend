@@ -1,4 +1,4 @@
-// @import 'utils';
+@import 'src/utils';
 
 :root {
   --red: hsl(0, 72%, 51%);
@@ -34,9 +34,9 @@
 
   --outline: #000;
 
-  // @include mobile {
-  //   --background: var(--background-card);
-  // }
+  @include mobile {
+    --background: var(--background-card);
+  }
 }
 
 :root.dark-theme {
@@ -73,7 +73,7 @@
 
   --outline: #fff;
 
-  // @include mobile {
-  //   --background: var(--background-card);
-  // }
+  @include mobile {
+    --background: var(--background-card);
+  }
 }

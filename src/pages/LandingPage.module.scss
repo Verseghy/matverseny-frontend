@@ -1,4 +1,4 @@
-// @import 'utils';
+@import 'src/utils';
 
 .container {
   display: grid;
@@ -6,9 +6,9 @@
   width: 100%;
   min-height: 100vh;
 
-  // @include mobile {
-  //   padding: 0 1.6rem;
-  // }
+  @include mobile {
+    padding: 0 1.6rem;
+  }
 }
 
 .card {
