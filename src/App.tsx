@@ -4,6 +4,7 @@ import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/Login'
 import RegisterPage from './pages/Register'
 import TeamPage, { CreateTeam, JoinTeam, ManageTeam } from './pages/Teams'
+import WaitPage from './pages/Wait'
 
 const App: Component = () => {
   return (
@@ -18,6 +19,7 @@ const App: Component = () => {
             <Route path="/create" component={CreateTeam} />
             <Route path="/manage" component={ManageTeam} />
           </Route>
+          <Route path="/wait" component={WaitPage} />
         </Routes>
       </Router>
     </main>
