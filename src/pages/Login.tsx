@@ -1,7 +1,10 @@
+import { firstValueFrom } from "rxjs"
 import { Component, createSignal } from "solid-js"
 import * as Yup from 'yup'
+import { authService } from "../App"
 import Button from "../components/Button"
 import Card from "../components/Card"
+import ErrorMessage from "../components/ErrorMessage"
 import FormField from "../components/FormField"
 import styles from './Login.module.scss'
 
@@ -11,6 +14,9 @@ const schema = Yup.object({
 })
 
 const LoginPage: Component = () => {
+  const [isPending, setIsPending] = createSignal(false)
+  const [errorCode, setErrorCode] = createSignal('')
+
   const [emailError, setEmailError] = createSignal('');
   const [passwordError, setPasswordError] = createSignal('');
 
@@ -45,6 +51,7 @@ const LoginPage: Component = () => {
           setPasswordError(error.errors[0])
         }
       }
+      return null
     }
   }
 
@@ -54,9 +61,17 @@ const LoginPage: Component = () => {
     setEmailDirty(true)
     setPasswordDirty(true)
 
+    setIsPending(true)
     const value = await validate()
-    // TODO: send login request
-    console.log(value)
+    if (value !== null) {
+      const login$ = authService.login(value)
+      try {
+        await firstValueFrom(login$)
+      } catch (e: any) {
+        setErrorCode(e.code)
+      }
+    }
+    setIsPending(false)
   }
 
   return (
@@ -68,6 +83,7 @@ const LoginPage: Component = () => {
           <h2>
             A <span>191</span> matematikaverseny oldalára
           </h2>
+          <ErrorMessage code={errorCode()} />
           <FormField
             name="email"
             display="Email"
@@ -102,6 +118,7 @@ const LoginPage: Component = () => {
             <Button
               class={styles.button}
               kind="primary"
+              disabled={isPending()}
               type="submit"
             >
               Bejelentkezés
