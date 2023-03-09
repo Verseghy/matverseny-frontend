@@ -7,9 +7,11 @@ import { CreateTeam, JoinTeam, ManageTeam } from './pages/Teams'
 import WaitPage from './pages/Wait'
 import { SocketServiceSingleton } from './services/socket'
 import { AuthService } from './services/auth'
+import { TeamService } from './services/team'
 
 export const authService = new AuthService('http://localhost:3001', 'http://localhost:3002')
 export const socketService = new SocketServiceSingleton('http://localhost:3002')
+export const teamService = new TeamService('http://localhost:3002')
 
 const App: Component = () => {
   return (

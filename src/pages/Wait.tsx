@@ -16,7 +16,7 @@ const formatTime = (time: number) => {
 }
 
 const WaitPage: Component = () => {
-  const [time, setTime] = createSignal(new Date(new Date().getTime() + 10*60000))
+  const [time, setTime] = createSignal(new Date(new Date().getTime() + 1*60000))
   const [formattedTime, setFormattedTime] = createSignal('00:00:00')
 
   const clock = from((set) => {
