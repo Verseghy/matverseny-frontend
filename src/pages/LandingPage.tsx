@@ -4,6 +4,7 @@ import Switch from '../components/Switch'
 import Card from '../components/Card'
 import { setTheme, theme } from '../utils/theme'
 import styles from './LandingPage.module.scss'
+import { FaSolidPhone, FaSolidEnvelope } from 'solid-icons/fa'
 
 const LandingPage: Component = () => {
   return (
@@ -31,17 +32,17 @@ const LandingPage: Component = () => {
           kapcsolóval állítható. A verseny időtartama alatt bármikor ki és be kapcsolható ezen az
           oldalon.
         </p>
-        {/* <p>Technikai probléma esetén:</p> */}
-        {/* <p class={styles.link}> */}
-        {/*   <span> */}
-        {/*     <FontAwesomeIcon icon={faEnvelope} class={styles.icon} /> */}
-        {/*     <a href="mailto:contact@zoltanszepesi.com">contact@zoltanszepesi.com</a> */}
-        {/*   </span> */}
-        {/*   <span> */}
-        {/*     <FontAwesomeIcon icon={faPhone} class={styles.icon} /> */}
-        {/*     <a href="tel:+36705227252">+36 70 522 7252</a> */}
-        {/*   </span> */}
-        {/* </p> */}
+        <p>Technikai probléma esetén:</p>
+        <p class={styles.link}>
+          <span>
+            <FaSolidEnvelope class={styles.icon} />
+            <a href="mailto:contact@zoltanszepesi.com">contact@zoltanszepesi.com</a>
+          </span>
+          <span>
+            <FaSolidPhone class={styles.icon} />
+            <a href="tel:+36705227252">+36 70 522 7252</a>
+          </span>
+        </p>
         <div class={styles.controls}>
           <Switch
             value={theme() === 'dark'}

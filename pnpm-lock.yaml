@@ -5,6 +5,7 @@ specifiers:
   '@solidjs/router': ^0.7.0
   sanitize.css: ^13.0.0
   sass: ^1.58.3
+  solid-icons: ^1.0.4
   solid-js: ^1.6.11
   typescript: ^4.9.5
   vite: ^4.1.1
@@ -15,6 +16,7 @@ dependencies:
   '@solid-primitives/media': 2.1.3_solid-js@1.6.12
   '@solidjs/router': 0.7.0_solid-js@1.6.12
   sanitize.css: 13.0.0
+  solid-icons: 1.0.4_solid-js@1.6.12
   solid-js: 1.6.12
   yup: 1.0.2
 
@@ -989,6 +991,15 @@ packages:
     resolution: {integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==}
     hasBin: true
     dev: true
+
+  /solid-icons/1.0.4_solid-js@1.6.12:
+    resolution: {integrity: sha512-gJTp4in3+OYCs9WvDkSLt4Los2unR3Uoder8wjh15GsfP20xiNOLfPTJllXmn+fI8+k3x7bRYtLGIgWd9fUQug==}
+    engines: {node: '>= 16'}
+    peerDependencies:
+      solid-js: '*'
+    dependencies:
+      solid-js: 1.6.12
+    dev: false
 
   /solid-js/1.6.12:
     resolution: {integrity: sha512-JFqRobfG3q5r1l4RYVOAukk6+FWtHpXGIjgh/GEsHKweN/kK+iHOtzUALE6+P5t/jIcSNeGiVitX8gmJg+cYvQ==}
