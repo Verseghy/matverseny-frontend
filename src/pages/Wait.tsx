@@ -26,7 +26,7 @@ const WaitPage: Component = () => {
 
   createEffect(() => {
     clock()
-    const diff = time().getTime() - new Date().getTime()
+    const diff = Math.abs(time().getTime() - new Date().getTime())
     setFormattedTime(formatTime(diff))
   })
 
