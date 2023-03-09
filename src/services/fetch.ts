@@ -1,3 +1,5 @@
+import jwt_decode from "jwt-decode";
+
 export const localStorageTokenKey = "IAMToken"
 
 export const baseFetchRequest: Request = {
@@ -11,4 +13,15 @@ export const baseFetchRequest: Request = {
     mode: "cors",
     redirect: "follow",
     referrerPolicy: "no-referrer",
+}
+
+export interface JWTClaims {
+    sub: string
+}
+
+export function jwtClaims(): JWTClaims | null {
+    if (!localStorage.getItem(localStorageTokenKey)) {
+        return null
+    }
+    return jwt_decode<JWTClaims>(localStorage.getItem(localStorageTokenKey)!)
 }
