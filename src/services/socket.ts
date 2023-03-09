@@ -1,4 +1,4 @@
-import {Observable, of, Subject} from "rxjs";
+import {BehaviorSubject, Observable, of, shareReplay, Subject} from "rxjs";
 import {webSocket, WebSocketSubject} from "rxjs/webSocket";
 import {localStorageTokenKey} from "./fetch";
 
@@ -31,9 +31,9 @@ interface BackendEvents {
 
 export class SocketServiceSingleton {
     private wsSubject: WebSocketSubject<BackendEvents> | null = null
-    private _teamInfo$: Subject<TeamInfo | null> = new Subject<TeamInfo | null>()
+    private _teamInfo$: BehaviorSubject<TeamInfo | null | undefined> = new BehaviorSubject<TeamInfo | null | undefined>(undefined)
     private _teamInfo: TeamInfo | null = null
-    private _time$: Subject<TimeInfo> = new Subject<TimeInfo>()
+    private _time$: BehaviorSubject<TimeInfo | undefined> = new BehaviorSubject<TimeInfo | undefined>(undefined)
 
     constructor(private baseURL: string) {
     }
@@ -85,11 +85,11 @@ export class SocketServiceSingleton {
     }
 
     // if teamInfo completes we got kicked
-    teamInfo(): Observable<TeamInfo | null> {
+    teamInfo(): Observable<TeamInfo | null | undefined> {
         return this._teamInfo$
     }
 
-    time(): Observable<TimeInfo> {
+    time(): Observable<TimeInfo | undefined> {
         return this._time$
     }
 }
