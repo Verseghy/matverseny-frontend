@@ -11,13 +11,21 @@ import { socketService, teamService } from '../App'
 import { CopyButton } from '../components/CopyButton'
 import { jwtClaims } from '../services/fetch'
 import { firstValueFrom } from 'rxjs'
+import { TeamMember } from '../services/socket'
 
 export const JoinTeam: Component = () => {
   let joinCodeInput: HTMLInputElement
   const [errorCode, setErrorCode] = createSignal('')
 
   const onJoin = async () => {
-    // TODO: join request
+    if (joinCodeInput.value) {
+      try {
+        await firstValueFrom(teamService.join({ code: joinCodeInput.value }))
+        setErrorCode('')
+      } catch (e: any) {
+        setErrorCode(e.code)
+      }
+    }
   }
 
   return (
@@ -84,7 +92,8 @@ export const CreateTeam: Component = () => {
       for (const error of e.inner) {
         if (error.path === 'name') {
           setNameError(error.errors[0])
-        }      }
+        }
+      }
       return null
     }
   }
@@ -96,7 +105,12 @@ export const CreateTeam: Component = () => {
 
     const value = await validate()
     if (value !== null) {
-      // TODO: create team
+      try {
+        await firstValueFrom(teamService.create(value))
+        setErrorCode('')
+      } catch (e: any) {
+        setErrorCode(e.code)
+      }
     }
   }
 
@@ -145,6 +159,7 @@ export const ManageTeam: Component = () => {
       await firstValueFrom(teamService.update({
         locked: value,
       }))
+      setErrorCode('')
     } catch (e: any) {
       setErrorCode(e.code)
     }
@@ -153,6 +168,7 @@ export const ManageTeam: Component = () => {
   const regenerateJoinCode = async () => {
     try {
       await firstValueFrom(teamService.regenerateCode())
+      setErrorCode('')
     } catch (e: any) {
       setErrorCode(e.code)
     }
@@ -161,14 +177,61 @@ export const ManageTeam: Component = () => {
   const kickMember = async (id: string) => {
     try {
       await firstValueFrom(teamService.kick({ user: id }))
+      setErrorCode('')
     } catch (e: any) {
       setErrorCode(e.code)
     }
   }
 
-  const user = () => {
-    if (user_id === null || info() === null) return null
-    return info()!.members.find((m) => m.id == user_id)
+  const toggleCoOwnerStatus = async (id: string) => {
+    const member = getMember(id)
+    if (member?.rank === 'Member') {
+      try {
+        await firstValueFrom(teamService.update({
+          co_owner: member.id,
+        }))
+        setErrorCode('')
+      } catch (e: any) {
+        setErrorCode(e.code)
+      }
+    } else if (member?.rank === 'CoOwner') {
+      try {
+        await firstValueFrom(teamService.update({
+          co_owner: null,
+        }))
+        setErrorCode('')
+      } catch (e: any) {
+        setErrorCode(e.code)
+      }
+    }
+  }
+
+  const leaveTeam = async () => {
+    try {
+      await firstValueFrom(teamService.leave())
+      setErrorCode('')
+    } catch (e: any) {
+      setErrorCode(e.code)
+    }
+  }
+
+  const deleteTeam = async () => {
+    try {
+      await firstValueFrom(teamService.disband())
+      setErrorCode('')
+    } catch (e: any) {
+      setErrorCode(e.code)
+    }
+  }
+
+  const getMember = (id: string): TeamMember | null => {
+    if (info() === null) return null
+    return info()!.members.find((m) => m.id === id) ?? null
+  }
+
+  const user = (): TeamMember | null => {
+    if (!user_id) return null
+    return getMember(user_id)
   }
 
   return (
@@ -195,31 +258,23 @@ export const ManageTeam: Component = () => {
               </div>
             </Show>
             <Show when={editMode()}>
-              <Formik
-                initialValues={renameTeamInitialValues}
-                onSubmit={onSubmit}
-                validationSchema={renameTeamValidationScheme}
-              >
-                {({ isSubmitting }) => (
-                  <Form>
-                    <div class={styles.renameTeam}>
-                      <FormField block autofocus name="name" />
-                      <div class={styles.renameButtons}>
-                        <Button
-                          disabled={isSubmitting}
-                          type="submit"
-                          class={styles.submitRename}
-                        >
-                          Átnevezés
-                        </Button>
-                        <Button onClick={() => setEditMode(false)}>
-                          <FaSolidXmark />
-                        </Button>
-                      </div>
-                    </div>
-                  </Form>
-                )}
-              </Formik>
+              <form>
+                <div class={styles.renameTeam}>
+                  <FormField block autofocus name="name" />
+                  <div class={styles.renameButtons}>
+                    <Button
+                      /* disabled={isSubmitting} */
+                      type="submit"
+                      class={styles.submitRename}
+                    >
+                      Átnevezés
+                    </Button>
+                    <Button onClick={() => setEditMode(false)}>
+                      <FaSolidXmark />
+                    </Button>
+                  </div>
+                </div>
+              </form>
             </Show>
             <div class={styles.codeContainer}>
               <span class={styles.codeTitle}>Csapatkód:</span>
