@@ -33,7 +33,7 @@ export class SocketServiceSingleton {
     private wsSubject: WebSocketSubject<BackendEvents> | null = null
     private _teamInfo$: Subject<TeamInfo | null> = new Subject<TeamInfo | null>()
     private _teamInfo: TeamInfo | null = null
-    private _time$: Subject<TimeInfo>
+    private _time$: Subject<TimeInfo> = new Subject<TimeInfo>()
 
     constructor(private baseURL: string) {
     }
