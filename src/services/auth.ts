@@ -1,8 +1,7 @@
 import {map, Observable, of, switchMap, throwError} from "rxjs";
 import {fromFetch} from "rxjs/internal/observable/dom/fetch";
-import {baseFetchRequest} from "./fetch";
-
-const localStorageTokenKey = "IAMToken"
+import {baseFetchRequest, localStorageTokenKey} from "./fetch";
+import {MemberClass} from "./socket";
 
 export class AuthService {
     constructor(private baseURLIAM: string, private baseURLMathCompetition: string) {
@@ -30,7 +29,7 @@ export class AuthService {
         )
     }
 
-    register({email, password, name, school, klass}: {email: string, password: string, name: string, school: string, klass: string}): Observable<string> {
+    register({email, password, name, school, klass}: {email: string, password: string, name: string, school: string, klass: MemberClass}): Observable<unknown> {
         return fromFetch(`${this.baseURLIAM}/v1/users/register`, {
             ...baseFetchRequest,
             method: "POST",
@@ -48,6 +47,24 @@ export class AuthService {
                 }
 
                 return this.login({email, password})
+            }),
+            switchMap(() => {
+                return fromFetch(`${this.baseURLMathCompetition}/register`, {
+                    ...baseFetchRequest,
+                    method: "POST",
+                    body: JSON.stringify({
+                        school,
+                        "class": klass
+                    })
+                }).pipe(
+                    switchMap(async resp => {
+                        if (!resp.ok) {
+                            const r = await resp.json()
+                            throw {code: r.code}
+                        }
+                        return "OK"
+                    })
+                )
             })
         )
     }
