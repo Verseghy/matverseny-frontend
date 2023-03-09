@@ -1,7 +1,11 @@
+import { useNavigate } from "@solidjs/router"
+import { firstValueFrom } from "rxjs"
 import { Component, createSignal } from "solid-js"
 import * as Yup from 'yup'
+import { authService } from "../App"
 import Button from "../components/Button"
 import Card from "../components/Card"
+import ErrorMessage from "../components/ErrorMessage"
 import FormField from "../components/FormField"
 import styles from './Register.module.scss'
 
@@ -43,6 +47,10 @@ const RegisterPage: Component = () => {
   let nameInput: HTMLInputElement
   let schoolInput: HTMLInputElement
   let classInput: HTMLInputElement
+
+  const [isPending, setIsPending] = createSignal(false)
+  const [errorCode, setErrorCode] = createSignal('')
+  const navigate = useNavigate()
 
   const validate = async (): Promise<any> => {
     try {
@@ -91,6 +99,8 @@ const RegisterPage: Component = () => {
           setClassError(error.errors[0])
         }
       }
+
+      return null
     }
   }
 
@@ -104,9 +114,23 @@ const RegisterPage: Component = () => {
     setSchoolDirty(true)
     setClassDirty(true)
 
+    setIsPending(true)
     const value = await validate()
-    // TODO: send register request
-    console.log(value)
+    if (value !== null) {
+      const register$ = authService.register({
+        ...value,
+        klass: value.class,
+      })
+
+      try {
+        await firstValueFrom(register$)
+
+        navigate('/login')
+      } catch (e: any) {
+        setErrorCode(e.code)
+      }
+    }
+    setIsPending(false)
   }
 
   return (
@@ -114,6 +138,7 @@ const RegisterPage: Component = () => {
       <Card class={styles.card}>
         <form onSubmit={submitForm}>
           <h1>Regisztráció</h1>
+          <ErrorMessage code={errorCode()} />
           <FormField
             name="email"
             display="Email"
@@ -193,7 +218,7 @@ const RegisterPage: Component = () => {
             <Button
               class={styles.button}
               kind="primary"
-              /* disabled={isSubmitting} */
+              disabled={isPending()}
               type="submit"
             >
               Regisztráció
