@@ -3,7 +3,6 @@ import * as Yup from 'yup'
 import Button from "../components/Button"
 import Card from "../components/Card"
 import FormField from "../components/FormField"
-import { register } from "../state/auth"
 import styles from './Register.module.scss'
 
 const schema = Yup.object().shape({
