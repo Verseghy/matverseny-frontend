@@ -25,7 +25,7 @@ export interface TimeInfo {
 }
 
 interface BackendEvents {
-    type: string
+    event: string
     data: any
 }
 
@@ -48,7 +48,7 @@ export class SocketServiceSingleton {
             token: localStorage.getItem(localStorageTokenKey)
         })
         this.wsSubject.subscribe(event => {
-            switch (event.type) {
+            switch (event.event) {
                 case "TEAM_INFO":
                     this._teamInfo = event.data
                     this._teamInfo$.next(this._teamInfo)
