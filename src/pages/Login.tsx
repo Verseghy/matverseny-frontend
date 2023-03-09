@@ -86,7 +86,7 @@ const LoginPage: Component = () => {
           <img src="/assets/logo.svg" alt="" class={styles.logo} />
           <h1>Bejelentkezés</h1>
           <h2>
-            A <span>191</span> matematikaverseny oldalára
+            A <span>192</span> matematikaverseny oldalára
           </h2>
           <ErrorMessage code={errorCode()} />
           <FormField
