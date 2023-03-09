@@ -1,4 +1,6 @@
-import {Observable, of} from "rxjs";
+import {Observable, of, Subject} from "rxjs";
+import {webSocket, WebSocketSubject} from "rxjs/webSocket";
+import {localStorageTokenKey} from "./fetch";
 
 export type MemberClass = 9 | 10 | 11 | 12
 export type MemberRank = "Owner" | "CoOwner" | "Member"
@@ -22,16 +24,38 @@ export interface TimeInfo {
     end_time: Date
 }
 
+interface BackendEvents {
+    type: string
+
+}
+
 export class SocketServiceSingleton {
+    wsSubject: WebSocketSubject<BackendEvents> | null = null
+    _teamInfo: Subject<TeamInfo | null>
+
     constructor(private baseURL: string) {
     }
 
-    start() {}
-    stop() {}
+    start() {
+        if (this.wsSubject) {
+            throw {error: "socket already started"}
+        }
+        this.wsSubject = webSocket<BackendEvents>(`${this.baseURL}/ws`)
+        this.wsSubject.next({
+            // @ts-ignore
+            token: localStorage.getItem(localStorageTokenKey)
+        })
+        this.wsSubject.subscribe(event => {
+            console.log(event)
+        })
+    }
+    stop() {
+        this.wsSubject?.unsubscribe()
+    }
 
     // if teamInfo completes we got kicked
     teamInfo(): Observable<TeamInfo | null> {
-        return of(null)
+        return this._teamInfo
     }
 
     time(): Observable<TimeInfo> {
