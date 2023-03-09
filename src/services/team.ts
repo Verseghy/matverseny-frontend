@@ -1,7 +1,7 @@
 import {Observable, of} from "rxjs";
 
 export class TeamService {
-    constructor(private baseURLIAM: string, private baseURLMathCompetition: string) {
+    constructor(private baseURLMathCompetition: string) {
     }
 
     regenerateCode(): Observable<string> {
