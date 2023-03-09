@@ -8,7 +8,7 @@ import WaitPage from './pages/Wait'
 import { SocketServiceSingleton } from './services/socket'
 import { AuthService } from './services/auth'
 
-export const authService = new AuthService('http://localhost:3001')
+export const authService = new AuthService('http://localhost:3001', 'http://localhost:3002')
 export const socketService = new SocketServiceSingleton('http://localhost:3002')
 
 const App: Component = () => {
