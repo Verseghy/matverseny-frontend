@@ -37,7 +37,7 @@ export interface BackendError {
 
 export class SocketServiceSingleton {
     private wsSubject: WebSocketSubject<BackendEvents> | null = null
-    private wsErrors$ = new Subject<BackendError | string>()
+    private wsErrors$ = new Subject<BackendError | string | undefined>()
     private _teamInfo$: BehaviorSubject<TeamInfo | null | undefined> = new BehaviorSubject<TeamInfo | null | undefined>(undefined)
     private _teamInfo: TeamInfo | null = null
     private _time$: BehaviorSubject<TimeInfo | undefined> = new BehaviorSubject<TimeInfo | undefined>(undefined)
@@ -82,8 +82,10 @@ export class SocketServiceSingleton {
                 try {
                     const reason = JSON.parse(err.reason)
                     this.wsErrors$.next(reason)
+                    console.log(reason)
                 } catch (e) {
                     this.wsErrors$.next(err.reason)
+                    console.log(err.reason)
                 }
                 console.error(err)
                 setTimeout(() => {
@@ -105,7 +107,7 @@ export class SocketServiceSingleton {
         return this._time$
     }
 
-    wsErrors(): Observable<BackendError | string> {
+    wsErrors(): Observable<BackendError | string | undefined> {
         return this.wsErrors$
     }
 
