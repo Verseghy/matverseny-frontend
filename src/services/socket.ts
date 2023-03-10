@@ -30,8 +30,14 @@ interface BackendEvents {
     data: any
 }
 
+export interface BackendError {
+    code: string
+    error: string
+}
+
 export class SocketServiceSingleton {
     private wsSubject: WebSocketSubject<BackendEvents> | null = null
+    private wsErrors$ = new Subject<BackendError | string>()
     private _teamInfo$: BehaviorSubject<TeamInfo | null | undefined> = new BehaviorSubject<TeamInfo | null | undefined>(undefined)
     private _teamInfo: TeamInfo | null = null
     private _time$: BehaviorSubject<TimeInfo | undefined> = new BehaviorSubject<TimeInfo | undefined>(undefined)
@@ -73,6 +79,12 @@ export class SocketServiceSingleton {
             },
             error: (err) => {
                 this.wsSubject = null
+                try {
+                    const reason = JSON.parse(err.reason)
+                    this.wsErrors$.next(reason)
+                } catch (e) {
+                    this.wsErrors$.next(err.reason)
+                }
                 console.error(err)
                 setTimeout(() => {
                     this.start()
@@ -84,7 +96,7 @@ export class SocketServiceSingleton {
         this.wsSubject?.unsubscribe()
     }
 
-    // if teamInfo completes we got kicked
+    // if teamInfo gets null we got kicked
     teamInfo(): Observable<TeamInfo | null | undefined> {
         return this._teamInfo$
     }
@@ -93,7 +105,11 @@ export class SocketServiceSingleton {
         return this._time$
     }
 
-    handleEvent(event: BackendEvents) {
+    wsErrors(): Observable<BackendError | string> {
+        return this.wsErrors$
+    }
+
+    private handleEvent(event: BackendEvents) {
         switch (event.event) {
             case "TEAM_INFO":
                 this._teamInfo = event.data
