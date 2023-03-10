@@ -1,7 +1,7 @@
 import { Component, createRenderEffect, createSignal, from } from 'solid-js'
 
 export type TimerProps = {
-  time: Date,
+  time?: Date,
 }
 
 const Timer: Component<TimerProps> = (props) => {
@@ -14,6 +14,8 @@ const Timer: Component<TimerProps> = (props) => {
 
   createRenderEffect(() => {
     clock()
+
+    if (!props.time) return
 
     const diff = props.time.getTime() - new Date().getTime()
     if (diff < 0) return
