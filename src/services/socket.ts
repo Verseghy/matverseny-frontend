@@ -47,36 +47,41 @@ export class SocketServiceSingleton {
             // @ts-ignore
             token: localStorage.getItem(localStorageTokenKey)
         })
-        this.wsSubject.subscribe(event => {
-            switch (event.event) {
-                case "TEAM_INFO":
-                    this._teamInfo = event.data
-                    this._teamInfo$.next(this._teamInfo)
-                    break
-                case "JOIN_TEAM":
-                    this._teamInfo?.members.push({id: event.data.user, name: event.data.name})
-                    this._teamInfo$.next(this._teamInfo)
-                    break
-                case "KICK_USER":
-                case "LEAVE_TEAM":
-                    if (!this._teamInfo) break
-                    this._teamInfo.members = this._teamInfo?.members.filter(member => member.id !== event.data.user)
-                    this._teamInfo$.next(this._teamInfo)
-                    break
-                case "UPDATE_TEAM":
-                    if (!this._teamInfo) break
-                    this._teamInfo = {
-                        ...this._teamInfo,
-                        ...event.data
-                    }
-                    this._teamInfo$.next(this._teamInfo)
-                    break
-                case "DISBAND_TEAM":
-                    this.wsSubject?.complete()
-                    break
+        this.wsSubject.subscribe({
+            next: event => {
+                switch (event.event) {
+                    case "TEAM_INFO":
+                        this._teamInfo = event.data
+                        this._teamInfo$.next(this._teamInfo)
+                        break
+                    case "JOIN_TEAM":
+                        this._teamInfo?.members.push({id: event.data.user, name: event.data.name})
+                        this._teamInfo$.next(this._teamInfo)
+                        break
+                    case "KICK_USER":
+                    case "LEAVE_TEAM":
+                        if (!this._teamInfo) break
+                        this._teamInfo.members = this._teamInfo?.members.filter(member => member.id !== event.data.user)
+                        this._teamInfo$.next(this._teamInfo)
+                        break
+                    case "UPDATE_TEAM":
+                        if (!this._teamInfo) break
+                        this._teamInfo = {
+                            ...this._teamInfo,
+                            ...event.data
+                        }
+                        this._teamInfo$.next(this._teamInfo)
+                        break
+                    case "DISBAND_TEAM":
+                        this._teamInfo$.next(null)
+                        break
 
-                case "UPDATE_TIME":
-                    this._time$.next(event.data)
+                    case "UPDATE_TIME":
+                        this._time$.next(event.data)
+                }
+            },
+            complete: () => {
+                this.wsSubject = null
             }
         })
     }
