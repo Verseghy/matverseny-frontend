@@ -1,4 +1,4 @@
-import { Component, createSignal, For, from, Show } from 'solid-js'
+import { Component, createEffect, createSignal, For, from, Show } from 'solid-js'
 import Button from '../components/Button'
 import Card from '../components/Card'
 import ErrorMessage from '../components/ErrorMessage'
@@ -12,8 +12,19 @@ import { CopyButton } from '../components/CopyButton'
 import { jwtClaims } from '../services/fetch'
 import { firstValueFrom } from 'rxjs'
 import { TeamMember } from '../services/socket'
+import { useNavigate } from '@solidjs/router'
 
 export const JoinTeam: Component = () => {
+  socketService.start()
+  const info = from(socketService.teamInfo())
+  const navigate = useNavigate()
+
+  createEffect(() => {
+    if (!!info()) {
+      navigate('/team/manage')
+    }
+  })
+
   let joinCodeInput: HTMLInputElement
   const [errorCode, setErrorCode] = createSignal('')
 
@@ -29,34 +40,36 @@ export const JoinTeam: Component = () => {
   }
 
   return (
-    <div class={styles.container}>
-      <Card class={styles.card}>
-        <div class={styles.section}>
-          <h1>Hozz létre egy csapatot</h1>
-          <Button href="/team/create" kind="primary">
-            Új csapat
-          </Button>
-        </div>
-        <div class={styles.divider}>
-          <span>vagy</span>
-        </div>
-        <div class={styles.section}>
-          <h1>Csatlakozz egy csapathoz</h1>
-          <Show when={errorCode() !== ''}>
-            <ErrorMessage class={styles.errorMessage} code={errorCode()} />
-          </Show>
-          <div class={styles.join}>
-            <Input
-              placeholder="Csapatkód"
-              ref={joinCodeInput!}
-            />
-            <Button kind="primary" onClick={onJoin}>
-              Csatlakozás
+    <Show when={info() === null}>
+      <div class={styles.container}>
+        <Card class={styles.card}>
+          <div class={styles.section}>
+            <h1>Hozz létre egy csapatot</h1>
+            <Button href="/team/create" kind="primary">
+              Új csapat
             </Button>
           </div>
-        </div>
-      </Card>
-    </div>
+          <div class={styles.divider}>
+            <span>vagy</span>
+          </div>
+          <div class={styles.section}>
+            <h1>Csatlakozz egy csapathoz</h1>
+            <Show when={errorCode() !== ''}>
+              <ErrorMessage class={styles.errorMessage} code={errorCode()} />
+            </Show>
+            <div class={styles.join}>
+              <Input
+                placeholder="Csapatkód"
+                ref={joinCodeInput!}
+              />
+              <Button kind="primary" onClick={onJoin}>
+                Csatlakozás
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </Show>
   )
 }
 
@@ -68,6 +81,16 @@ const createTeamScheme = Yup.object({
 
 
 export const CreateTeam: Component = () => {
+  socketService.start()
+  const info = from(socketService.teamInfo())
+  const navigate = useNavigate()
+
+  createEffect(() => {
+    if (!!info()) {
+      navigate('/team/manage')
+    }
+  })
+
   const [nameError, setNameError] = createSignal('')
   const [nameDirty, setNameDirty] = createSignal(false)
   let nameInput: HTMLInputElement
@@ -115,35 +138,37 @@ export const CreateTeam: Component = () => {
   }
 
   return (
-    <div class={styles.container}>
-      <Card class={styles.card}>
-        <form onSubmit={submitForm}>
-          <h1>Csapat létrehozása</h1>
-          <ErrorMessage class={styles.errorMessage} code={errorCode()} />
-          <FormField
-            name="name"
-            display="Csapat neve"
-            autofocus
-            class={styles.nameInput} 
-            errorMessage={nameDirty() ? nameError() : ''}
-            ref={nameInput!}
-            onBlur={() => {
-              setNameDirty(true)
-              validate()
-            }}
-            onInput={validate}
-          />
-          <div class={styles.buttons}>
-            <Button href="/team" block>
-              Vissza
-            </Button>
-            <Button type="submit" disabled={false} kind="primary" block>
-              Létrehozás
-            </Button>
-          </div>
-        </form>
-      </Card>
-    </div>
+    <Show when={info() === null}>
+      <div class={styles.container}>
+        <Card class={styles.card}>
+          <form onSubmit={submitForm}>
+            <h1>Csapat létrehozása</h1>
+            <ErrorMessage class={styles.errorMessage} code={errorCode()} />
+            <FormField
+              name="name"
+              display="Csapat neve"
+              autofocus
+              class={styles.nameInput} 
+              errorMessage={nameDirty() ? nameError() : ''}
+              ref={nameInput!}
+              onBlur={() => {
+                setNameDirty(true)
+                validate()
+              }}
+              onInput={validate}
+            />
+            <div class={styles.buttons}>
+              <Button href="/team" block>
+                Vissza
+              </Button>
+              <Button type="submit" disabled={false} kind="primary" block>
+                Létrehozás
+              </Button>
+            </div>
+          </form>
+        </Card>
+      </div>
+    </Show>
   )
 }
 
