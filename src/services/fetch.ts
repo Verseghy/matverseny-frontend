@@ -3,7 +3,7 @@ import {BehaviorSubject, map, Observable} from "rxjs";
 
 export const localStorageTokenKey = "IAMToken"
 
-export const baseFetchRequest: Request = {
+export const baseFetchRequest: () => Request = () => ({
     cache: "no-cache",
     credentials: "omit",
     headers: {
@@ -14,7 +14,7 @@ export const baseFetchRequest: Request = {
     mode: "cors",
     redirect: "follow",
     referrerPolicy: "no-referrer",
-}
+})
 
 export interface JWTClaims {
     sub: string

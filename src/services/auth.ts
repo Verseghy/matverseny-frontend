@@ -10,7 +10,7 @@ export class AuthService {
 
     login({email, password}: {email: string, password: string}): Observable<string> {
         return fromFetch(`${this.baseURLIAM}/v1/users/login`, {
-            ...baseFetchRequest,
+            ...baseFetchRequest(),
             method: "POST",
             body: JSON.stringify({
                 email,
@@ -32,7 +32,7 @@ export class AuthService {
 
     register({email, password, name, school, klass}: {email: string, password: string, name: string, school: string, klass: MemberClass}): Observable<void> {
         return fromFetch(`${this.baseURLIAM}/v1/users/register`, {
-            ...baseFetchRequest,
+            ...baseFetchRequest(),
             method: "POST",
             body: JSON.stringify({
                 email,
@@ -51,7 +51,7 @@ export class AuthService {
             }),
             switchMap(() => {
                 return fromFetch(`${this.baseURLMathCompetition}/register`, {
-                    ...baseFetchRequest,
+                    ...baseFetchRequest(),
                     method: "POST",
                     body: JSON.stringify({
                         school,
