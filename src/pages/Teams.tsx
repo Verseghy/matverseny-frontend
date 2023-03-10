@@ -7,9 +7,8 @@ import Input from '../components/Input'
 import styles from './Teams.module.scss'
 import * as Yup from 'yup'
 import { FaSolidCrown, FaSolidKey, FaSolidRotateRight, FaSolidXmark } from 'solid-icons/fa'
-import { socketService, teamService } from '../App'
+import { jwtService, socketService, teamService } from '../App'
 import { CopyButton } from '../components/CopyButton'
-import { jwtClaims } from '../services/fetch'
 import { firstValueFrom } from 'rxjs'
 import { TeamMember } from '../services/socket'
 import { useNavigate } from '@solidjs/router'
@@ -174,11 +173,21 @@ export const CreateTeam: Component = () => {
 }
 
 export const ManageTeam: Component = () => {
+  socketService.start()
+  const info = from(socketService.teamInfo())
+  const claims = from(jwtService.getClaims())
+
+  const navigate = useNavigate()
+
+  createEffect(() => {
+    if (info() === null) {
+      navigate('/team')
+    }
+    console.log(info())
+  })
+
   const [errorCode, setErrorCode] = createSignal('')
   const [editMode, setEditMode] = createSignal(false)
-  const info = from(socketService.teamInfo())
-
-  const user_id = jwtClaims()?.sub
 
   const changeLock = async (value: boolean) => {
     try {
@@ -252,10 +261,13 @@ export const ManageTeam: Component = () => {
 
   const getMember = (id: string): TeamMember | null => {
     if (info() === null) return null
-    return info()!.members.find((m) => m.id === id) ?? null
+    const member = info()!.members.find((m) => m.id === id.slice("UserID-".length)) ?? null
+    return member
   }
 
   const user = (): TeamMember | null => {
+    const user_id = claims()?.sub
+    console.log('user', user_id)
     if (!user_id) return null
     return getMember(user_id)
   }
@@ -264,7 +276,7 @@ export const ManageTeam: Component = () => {
     <Show when={info() && user() !== null}>
       <div class={styles.container}>
         <Card class={styles.card}>
-          <h1>{info.name}</h1>
+          <h1>{info()!.name}</h1>
           <ErrorMessage code={errorCode()} />
           <Show when={user()!.rank === 'Owner'}>
             <Show when={!editMode()}>
