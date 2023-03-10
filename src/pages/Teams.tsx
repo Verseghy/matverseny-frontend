@@ -262,14 +262,14 @@ export const ManageTeam: Component = () => {
 
   const getMember = (id: string): TeamMember | null => {
     if (info() === null) return null
-    const member = info()!.members.find((m) => m.id === id.slice("UserID-".length)) ?? null
+    const member = info()!.members.find((m) => m.id === id) ?? null
     return member
   }
 
   const user = (): TeamMember | null => {
     const user_id = claims()?.sub
     if (!user_id) return null
-    return getMember(user_id)
+    return getMember(user_id.slice("UserID-".length))
   }
 
   return (
