@@ -76,7 +76,7 @@ export const JoinTeam: Component = () => {
 
 const createTeamScheme = Yup.object({
   name: Yup.string()
-    .max(64, 'A név maximum 64 karakter hosszú lehet')
+    .max(32, 'A név maximum 32 karakter hosszú lehet')
     .required('Név megadása kötelező'),
 })
 
@@ -190,6 +190,49 @@ export const ManageTeam: Component = () => {
   const [errorCode, setErrorCode] = createSignal('')
   const [editMode, setEditMode] = createSignal(false)
 
+  const [isPending, setIsPending] = createSignal(false)
+  let nameInput: HTMLInputElement
+
+  const schema = Yup.object({
+    name: Yup.string()
+      .max(32, 'A név maximum 32 karakter hosszú lehet')
+      .required('A név nem lehet üres')
+  })
+
+  const validate = async () => {
+    try {
+      const value = await schema.validate(
+        {
+          name: nameInput.value,
+        },
+        {
+          abortEarly: false,
+        }
+      )
+      return value
+    } catch (e: any) {
+      if (!(e instanceof Yup.ValidationError)) return
+      return null
+    }
+  }
+
+  const changeName = async (e: Event) => {
+    e.preventDefault()
+
+    setIsPending(true)
+    const value = await validate()
+    if (value !== null) {
+      try {
+        await firstValueFrom(teamService.update({
+          name: value!.name
+        }))
+      } catch (e: any) {
+        setErrorCode(e.code)
+      }
+    }
+    setIsPending(false)
+  }
+
   const changeLock = async (value: boolean) => {
     try {
       await firstValueFrom(teamService.update({
@@ -296,12 +339,12 @@ export const ManageTeam: Component = () => {
               </div>
             </Show>
             <Show when={editMode()}>
-              <form>
+              <form onSubmit={changeName}>
                 <div class={styles.renameTeam}>
-                  <FormField block autofocus name="name" />
+                  <FormField block autofocus name="name" ref={nameInput!} />
                   <div class={styles.renameButtons}>
                     <Button
-                      /* disabled={isSubmitting} */
+                      disabled={isPending()}
                       type="submit"
                       class={styles.submitRename}
                     >
