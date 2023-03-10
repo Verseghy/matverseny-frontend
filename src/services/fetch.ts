@@ -28,6 +28,13 @@ export class JWTService {
         this._jwtToken$.next(t)
     }
 
+    getClaimsOnce(): JWTClaims | undefined {
+        if (!localStorage.getItem(localStorageTokenKey)) {
+            return undefined
+        }
+        return jwt_decode<JWTClaims>(localStorage.getItem(localStorageTokenKey)!)
+    }
+
     getClaims(): Observable<JWTClaims | undefined> {
         return this._jwtToken$.pipe(
             map(() => {

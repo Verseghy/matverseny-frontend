@@ -1,7 +1,7 @@
 import {BehaviorSubject, Observable, of, shareReplay, Subject, tap} from "rxjs";
 import {webSocket, WebSocketSubject} from "rxjs/webSocket";
 import {localStorageTokenKey} from "./fetch";
-import {boolean} from "yup";
+import {jwtService} from "../App";
 
 export type MemberClass = 9 | 10 | 11 | 12
 export type MemberRank = "Owner" | "CoOwner" | "Member"
@@ -125,6 +125,10 @@ export class SocketServiceSingleton {
             case "LEAVE_TEAM":
                 if (!this._teamInfo) break
                 this._teamInfo.members = this._teamInfo?.members.filter(member => member.id !== event.data.user)
+                if (jwtService.getClaimsOnce()?.sub.endsWith(event.data.user)) {
+                    this._teamInfo$.next(null)
+                    break
+                }
                 this._teamInfo$.next(this._teamInfo)
                 break
             case "UPDATE_TEAM":

@@ -32,6 +32,7 @@ export const JoinTeam: Component = () => {
       try {
         await firstValueFrom(teamService.join({ code: joinCodeInput.value }))
         setErrorCode('')
+        socketService.start()
       } catch (e: any) {
         setErrorCode(e.code)
       }
@@ -148,7 +149,7 @@ export const CreateTeam: Component = () => {
               name="name"
               display="Csapat neve"
               autofocus
-              class={styles.nameInput} 
+              class={styles.nameInput}
               errorMessage={nameDirty() ? nameError() : ''}
               ref={nameInput!}
               onBlur={() => {
