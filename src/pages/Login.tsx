@@ -1,8 +1,8 @@
 import { useNavigate } from "@solidjs/router"
 import { firstValueFrom } from "rxjs"
-import { Component, createSignal } from "solid-js"
+import { Component, createEffect, createSignal, from } from "solid-js"
 import * as Yup from 'yup'
-import { authService } from "../App"
+import { authService, jwtService } from "../App"
 import Button from "../components/Button"
 import Card from "../components/Card"
 import ErrorMessage from "../components/ErrorMessage"
@@ -15,6 +15,13 @@ const schema = Yup.object({
 })
 
 const LoginPage: Component = () => {
+  const claims = from(jwtService.getClaims())
+  const navigate = useNavigate()
+
+  createEffect(() => {
+    if (claims()) navigate('/team')
+  })
+
   const [isPending, setIsPending] = createSignal(false)
   const [errorCode, setErrorCode] = createSignal('')
 
@@ -26,8 +33,6 @@ const LoginPage: Component = () => {
 
   let emailInput: HTMLInputElement
   let passwordInput: HTMLInputElement
-
-  const navigate = useNavigate();
 
   const validate = async (): Promise<any> => {
     try {

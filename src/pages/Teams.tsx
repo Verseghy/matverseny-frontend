@@ -15,13 +15,14 @@ import { useNavigate } from '@solidjs/router'
 
 export const JoinTeam: Component = () => {
   socketService.start()
+
   const info = from(socketService.teamInfo())
+  const claims = from(jwtService.getClaims())
   const navigate = useNavigate()
 
   createEffect(() => {
-    if (!!info()) {
-      navigate('/team/manage')
-    }
+    if (!claims()) navigate('/login')
+    if (!!info()) navigate('/team/manage')
   })
 
   let joinCodeInput: HTMLInputElement
@@ -82,13 +83,14 @@ const createTeamScheme = Yup.object({
 
 export const CreateTeam: Component = () => {
   socketService.start()
+
   const info = from(socketService.teamInfo())
+  const claims = from(jwtService.getClaims())
   const navigate = useNavigate()
 
   createEffect(() => {
-    if (!!info()) {
-      navigate('/team/manage')
-    }
+    if (!claims()) navigate('/login')
+    if (!!info()) navigate('/team/manage')
   })
 
   const [nameError, setNameError] = createSignal('')
@@ -175,16 +177,14 @@ export const CreateTeam: Component = () => {
 
 export const ManageTeam: Component = () => {
   socketService.start()
+
   const info = from(socketService.teamInfo())
   const claims = from(jwtService.getClaims())
-
   const navigate = useNavigate()
 
   createEffect(() => {
-    if (info() === null) {
-      navigate('/team')
-    }
-    console.log(info())
+    if (!claims()) navigate('/login')
+    if (info() === null) navigate('/team')
   })
 
   const [errorCode, setErrorCode] = createSignal('')
