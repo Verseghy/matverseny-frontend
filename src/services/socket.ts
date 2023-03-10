@@ -1,4 +1,4 @@
-import {BehaviorSubject, Observable, of, shareReplay, Subject} from "rxjs";
+import {BehaviorSubject, Observable, of, shareReplay, Subject, tap} from "rxjs";
 import {webSocket, WebSocketSubject} from "rxjs/webSocket";
 import {localStorageTokenKey} from "./fetch";
 
@@ -87,6 +87,11 @@ export class SocketServiceSingleton {
                 this._time$.next(undefined)
             },
             error: (err) => {
+                if (JSON.parse(err.reason).code === "M011") {
+                    this._teamInfo = null
+                    this._teamInfo$.next(null)
+                    return
+                }
                 console.error(err)
                 this.wsSubject = null
                 setTimeout(() => {
