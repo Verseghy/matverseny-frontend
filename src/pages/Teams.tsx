@@ -268,7 +268,6 @@ export const ManageTeam: Component = () => {
 
   const user = (): TeamMember | null => {
     const user_id = claims()?.sub
-    console.log('user', user_id)
     if (!user_id) return null
     return getMember(user_id)
   }
