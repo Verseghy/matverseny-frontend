@@ -9,6 +9,9 @@
   color: var(--text-on-gray);
   display: inline-block;
   text-align: center;
+  display: inline-grid;
+  place-items: center;
+  height: 3.6rem;
 
   &.block {
     display: block;
