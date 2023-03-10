@@ -137,6 +137,27 @@ export class SocketServiceSingleton {
                     ...this._teamInfo,
                     ...event.data
                 }
+                if (event.data.co_owner) {
+                    // @ts-ignore can't be null typescript is stupid
+                    this._teamInfo.members =this._teamInfo?.members.map(m => {
+                        if (m.rank !== "Owner") {
+                            m.rank = "Member"
+                        }
+                        if (m.id === event.data.co_owner) {
+                            m.rank = "CoOwner"
+                        }
+                        return m
+                    })
+                }
+                if (event.data.co_owner == null) {
+                    // @ts-ignore can't be null typescript is stupid
+                    this._teamInfo.members =this._teamInfo?.members.map(m => {
+                        if (m.rank !== "Owner") {
+                            m.rank = "Member"
+                        }
+                        return m
+                    })
+                }
                 this._teamInfo$.next(this._teamInfo)
                 break
             case "DISBAND_TEAM":
