@@ -47,11 +47,16 @@ export class SocketServiceSingleton {
             url: `${this.baseURL}/ws`,
             closeObserver: {
                 next: (e) => {
-                    if (JSON.parse(e.reason).code === "M011") {
+                    const reason = JSON.parse(e.reason)
+                    if (reason.code === "M011") {
                         this._teamInfo = null
                         this._teamInfo$.next(null)
                         return
                     }
+                    if (reason.code) {
+                        return
+                    }
+                    this.handleEvent(reason)
                 }
             }
         })
@@ -60,38 +65,7 @@ export class SocketServiceSingleton {
             token: localStorage.getItem(localStorageTokenKey)
         })
         this.wsSubject.subscribe({
-            next: event => {
-                switch (event.event) {
-                    case "TEAM_INFO":
-                        this._teamInfo = event.data
-                        this._teamInfo$.next(this._teamInfo)
-                        break
-                    case "JOIN_TEAM":
-                        this._teamInfo?.members.push({id: event.data.user, name: event.data.name})
-                        this._teamInfo$.next(this._teamInfo)
-                        break
-                    case "KICK_USER":
-                    case "LEAVE_TEAM":
-                        if (!this._teamInfo) break
-                        this._teamInfo.members = this._teamInfo?.members.filter(member => member.id !== event.data.user)
-                        this._teamInfo$.next(this._teamInfo)
-                        break
-                    case "UPDATE_TEAM":
-                        if (!this._teamInfo) break
-                        this._teamInfo = {
-                            ...this._teamInfo,
-                            ...event.data
-                        }
-                        this._teamInfo$.next(this._teamInfo)
-                        break
-                    case "DISBAND_TEAM":
-                        this._teamInfo$.next(null)
-                        break
-
-                    case "UPDATE_TIME":
-                        this._time$.next(event.data)
-                }
-            },
+            next: event => this.handleEvent(event),
             complete: () => {
                 this.wsSubject = null
                 this._teamInfo = null
@@ -117,5 +91,38 @@ export class SocketServiceSingleton {
 
     time(): Observable<TimeInfo | undefined> {
         return this._time$
+    }
+
+    handleEvent(event: BackendEvents) {
+        switch (event.event) {
+            case "TEAM_INFO":
+                this._teamInfo = event.data
+                this._teamInfo$.next(this._teamInfo)
+                break
+            case "JOIN_TEAM":
+                this._teamInfo?.members.push({id: event.data.user, name: event.data.name})
+                this._teamInfo$.next(this._teamInfo)
+                break
+            case "KICK_USER":
+            case "LEAVE_TEAM":
+                if (!this._teamInfo) break
+                this._teamInfo.members = this._teamInfo?.members.filter(member => member.id !== event.data.user)
+                this._teamInfo$.next(this._teamInfo)
+                break
+            case "UPDATE_TEAM":
+                if (!this._teamInfo) break
+                this._teamInfo = {
+                    ...this._teamInfo,
+                    ...event.data
+                }
+                this._teamInfo$.next(this._teamInfo)
+                break
+            case "DISBAND_TEAM":
+                this._teamInfo$.next(null)
+                break
+
+            case "UPDATE_TIME":
+                this._time$.next(event.data)
+        }
     }
 }
