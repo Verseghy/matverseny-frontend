@@ -82,6 +82,16 @@ export class SocketServiceSingleton {
             },
             complete: () => {
                 this.wsSubject = null
+                this._teamInfo = null
+                this._teamInfo$.next(null)
+                this._time$.next(undefined)
+            },
+            error: (err) => {
+                console.error(err)
+                this.wsSubject = null
+                setTimeout(() => {
+                    this.start()
+                }, 2000)
             }
         })
     }
