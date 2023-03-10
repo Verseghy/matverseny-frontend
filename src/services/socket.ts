@@ -82,8 +82,8 @@ export class SocketServiceSingleton {
             },
             complete: () => {
                 this.wsSubject = null
-                this._teamInfo = null
-                this._teamInfo$.next(null)
+                this._teamInfo = undefined
+                this._teamInfo$.next(undefined)
                 this._time$.next(undefined)
             },
             error: (err) => {
