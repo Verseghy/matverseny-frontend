@@ -8,10 +8,12 @@ import WaitPage from './pages/Wait'
 import { SocketServiceSingleton } from './services/socket'
 import { AuthService } from './services/auth'
 import { TeamService } from './services/team'
+import { JWTService } from './services/fetch'
 
 export const authService = new AuthService(import.meta.env.VITE_IAM_BASE_URL, import.meta.env.VITE_MATHCOMPETITION_BASE_URL)
 export const socketService = new SocketServiceSingleton(import.meta.env.VITE_MATHCOMPETITION_BASE_WS_URL)
 export const teamService = new TeamService(import.meta.env.VITE_MATHCOMPETITION_BASE_URL)
+export const jwtService = new JWTService()
 
 const App: Component = () => {
   return (

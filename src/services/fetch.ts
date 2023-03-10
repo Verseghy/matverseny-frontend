@@ -1,6 +1,7 @@
 import jwt_decode from "jwt-decode";
+import {BehaviorSubject, map, Observable} from "rxjs";
 
-export const localStorageTokenKey = "IAMToken"
+const localStorageTokenKey = "IAMToken"
 
 export const baseFetchRequest: Request = {
     cache: "no-cache",
@@ -19,9 +20,22 @@ export interface JWTClaims {
     sub: string
 }
 
-export function jwtClaims(): JWTClaims | null {
-    if (!localStorage.getItem(localStorageTokenKey)) {
-        return null
+export class JWTService {
+    private _jwtToken$ = new BehaviorSubject<string | undefined>(undefined)
+
+    setToken(t: string) {
+        localStorage.setItem(localStorageTokenKey, t)
+        this._jwtToken$.next(t)
     }
-    return jwt_decode<JWTClaims>(localStorage.getItem(localStorageTokenKey)!)
+
+    getClaims(): Observable<JWTClaims | undefined> {
+        return this._jwtToken$.pipe(
+            map(() => {
+                if (!localStorage.getItem(localStorageTokenKey)) {
+                    return undefined
+                }
+                return jwt_decode<JWTClaims>(localStorage.getItem(localStorageTokenKey)!)
+            })
+        )
+    }
 }
