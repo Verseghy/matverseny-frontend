@@ -338,7 +338,7 @@ export const ManageTeam: Component = () => {
                   <span class={styles.memberName}>
                     <span>{member.name}</span>
                     <Show when={member.rank === 'Owner'}>
-                      <FaSolidCrown size={'xs'} class={styles.star} />
+                      <FaSolidCrown size={16} class={styles.star} />
                     </Show>
                   </span>
                   <Show when={user()!.rank !== 'Member'}>
