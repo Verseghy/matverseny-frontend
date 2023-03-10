@@ -165,7 +165,10 @@ export class SocketServiceSingleton {
                 break
 
             case "UPDATE_TIME":
-                this._time$.next(event.data)
+                this._time$.next({
+                    start_time: new Date(event.data.start_time * 1000),
+                    end_time: new Date(event.data.end_time * 1000)
+                })
         }
     }
 }
