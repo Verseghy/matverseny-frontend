@@ -100,9 +100,9 @@ export class TeamService {
     }
 
     update({name, owner, co_owner, locked}: {name?: string, owner?: string, co_owner?: string | null, locked?: boolean}): Observable<void> {
-        return fromFetch(`${this.baseURLMathCompetition}/team/update`, {
+        return fromFetch(`${this.baseURLMathCompetition}/team`, {
             ...baseFetchRequest,
-            method: "POST",
+            method: "PATCH",
             body: JSON.stringify({
                 name,
                 owner,
