@@ -133,7 +133,7 @@ export const CreateTeam: Component = () => {
       try {
         await firstValueFrom(teamService.create(value))
         setErrorCode('')
-        navigate('/team/manage')
+        socketService.start()
       } catch (e: any) {
         setErrorCode(e.code)
       }
