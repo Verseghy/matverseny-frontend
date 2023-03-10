@@ -9,9 +9,9 @@ import { SocketServiceSingleton } from './services/socket'
 import { AuthService } from './services/auth'
 import { TeamService } from './services/team'
 
-export const authService = new AuthService('http://localhost:3001', 'http://localhost:3002')
-export const socketService = new SocketServiceSingleton('ws://localhost:3002')
-export const teamService = new TeamService('http://localhost:3002')
+export const authService = new AuthService(import.meta.env.VITE_IAM_BASE_URL, import.meta.env.VITE_MATHCOMPETITION_BASE_URL)
+export const socketService = new SocketServiceSingleton(import.meta.env.VITE_MATHCOMPETITION_BASE_WS_URL)
+export const teamService = new TeamService(import.meta.env.VITE_MATHCOMPETITION_BASE_URL)
 
 const App: Component = () => {
   return (
