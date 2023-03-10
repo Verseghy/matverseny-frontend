@@ -1,7 +1,7 @@
 import jwt_decode from "jwt-decode";
 import {BehaviorSubject, map, Observable} from "rxjs";
 
-const localStorageTokenKey = "IAMToken"
+export const localStorageTokenKey = "IAMToken"
 
 export const baseFetchRequest: Request = {
     cache: "no-cache",
