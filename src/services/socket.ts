@@ -1,6 +1,7 @@
 import {BehaviorSubject, Observable, of, shareReplay, Subject, tap} from "rxjs";
 import {webSocket, WebSocketSubject} from "rxjs/webSocket";
 import {localStorageTokenKey} from "./fetch";
+import {boolean} from "yup";
 
 export type MemberClass = 9 | 10 | 11 | 12
 export type MemberRank = "Owner" | "CoOwner" | "Member"
@@ -42,7 +43,18 @@ export class SocketServiceSingleton {
         if (this.wsSubject) {
             return
         }
-        this.wsSubject = webSocket<BackendEvents>(`${this.baseURL}/ws`)
+        this.wsSubject = webSocket<BackendEvents>({
+            url: `${this.baseURL}/ws`,
+            closeObserver: {
+                next: (e) => {
+                    if (JSON.parse(e.reason).code === "M011") {
+                        this._teamInfo = null
+                        this._teamInfo$.next(null)
+                        return
+                    }
+                }
+            }
+        })
         this.wsSubject.next({
             // @ts-ignore
             token: localStorage.getItem(localStorageTokenKey)
@@ -83,16 +95,10 @@ export class SocketServiceSingleton {
             complete: () => {
                 this.wsSubject = null
                 this._teamInfo = null
-                this._teamInfo$.next(undefined)
                 this._time$.next(undefined)
             },
             error: (err) => {
                 this.wsSubject = null
-                if (JSON.parse(err.reason).code === "M011") {
-                    this._teamInfo = null
-                    this._teamInfo$.next(null)
-                    return
-                }
                 console.error(err)
                 setTimeout(() => {
                     this.start()
