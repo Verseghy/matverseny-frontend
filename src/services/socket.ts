@@ -87,13 +87,13 @@ export class SocketServiceSingleton {
                 this._time$.next(undefined)
             },
             error: (err) => {
+                this.wsSubject = null
                 if (JSON.parse(err.reason).code === "M011") {
                     this._teamInfo = null
                     this._teamInfo$.next(null)
                     return
                 }
                 console.error(err)
-                this.wsSubject = null
                 setTimeout(() => {
                     this.start()
                 }, 2000)
