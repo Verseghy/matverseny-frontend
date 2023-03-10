@@ -140,22 +140,19 @@ export class SocketServiceSingleton {
                 if (event.data.co_owner) {
                     // @ts-ignore can't be null typescript is stupid
                     this._teamInfo.members =this._teamInfo?.members.map(m => {
-                        if (m.rank !== "Owner") {
-                            m.rank = "Member"
+                        return {
+                            ...m,
+                            rank: m.rank !== "Owner" ? (m.id === event.data.co_owner ? "CoOwner" : "Member") : "Owner"
                         }
-                        if (m.id === event.data.co_owner) {
-                            m.rank = "CoOwner"
-                        }
-                        return m
                     })
                 }
                 if (event.data.co_owner == null) {
                     // @ts-ignore can't be null typescript is stupid
                     this._teamInfo.members =this._teamInfo?.members.map(m => {
-                        if (m.rank !== "Owner") {
-                            m.rank = "Member"
+                        return {
+                            ...m,
+                            rank: m.rank === "Owner" ? "Owner" : "Member"
                         }
-                        return m
                     })
                 }
                 this._teamInfo$.next(this._teamInfo)
