@@ -290,7 +290,7 @@ export const ManageTeam: Component = () => {
                   </Button>
                 ) : (
                   <Button onClick={() => changeLock(true)} block>
-                    Nevezése a versenyre
+                    Nevezés a versenyre
                   </Button>
                 )}
               </div>
