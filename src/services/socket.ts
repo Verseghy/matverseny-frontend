@@ -108,6 +108,7 @@ export class SocketServiceSingleton {
                     if (reason.code === 'M011') {
                         this._teamInfo = null
                         this._teamInfo$.next(null)
+                        this.stop()
                         return
                     }
                     if (reason.code) {
