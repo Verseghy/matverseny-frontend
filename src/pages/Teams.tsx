@@ -387,14 +387,6 @@ export const ManageTeam: Component = () => {
                   <Show when={user()!.rank !== 'Member'}>
                     <div class={styles.actions}>
                       <Show when={member.rank !== 'Owner' && member.id !== user()!.id}>
-                        <Show when={user()!.rank === 'Owner'}>
-                          <Button
-                            onClick={() => toggleCoOwnerStatus(member.id)}
-                            kind={member.rank === 'CoOwner' ? 'primary' : undefined}
-                          >
-                            <FaSolidKey />
-                          </Button>
-                        </Show>
                         <Button onClick={() => kickMember(member.id)}>
                           <FaSolidXmark />
                         </Button>
