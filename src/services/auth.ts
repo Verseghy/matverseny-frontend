@@ -1,8 +1,8 @@
 import {map, Observable, switchMap} from "rxjs";
 import {fromFetch} from "rxjs/internal/observable/dom/fetch";
-import {baseFetchRequest} from "./fetch";
+import {baseFetchRequest, localStorageTokenKey} from "./fetch";
 import {MemberClass} from "./socket";
-import {jwtService} from "../App";
+import {jwtService, socketService} from "../App";
 
 export class AuthService {
     constructor(private baseURLIAM: string, private baseURLMathCompetition: string) {
@@ -67,5 +67,10 @@ export class AuthService {
                 )
             })
         )
+    }
+
+    logout() {
+        socketService.stop()
+        localStorage.removeItem(localStorageTokenKey)
     }
 }
