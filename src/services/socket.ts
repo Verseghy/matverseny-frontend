@@ -1,7 +1,7 @@
 import {BehaviorSubject, Observable, of, shareReplay, Subject, tap} from "rxjs";
 import {webSocket, WebSocketSubject} from "rxjs/webSocket";
 import {localStorageTokenKey} from "./fetch";
-import {jwtService} from "../App";
+import {jwtService, socketService} from "../App";
 
 export type MemberClass = 9 | 10 | 11 | 12
 export type MemberRank = "Owner" | "CoOwner" | "Member"
@@ -29,7 +29,7 @@ export interface Problem {
     id: string
     body: string
     image?: string
-    answer: number | null
+    solution: number | null
 }
 
 interface BackendEvents {
@@ -42,17 +42,55 @@ export interface BackendError {
     error: string
 }
 
+type SocketDesiredState  = null | "started" | "stopped"
+
 export class SocketServiceSingleton {
+    private desiredState: SocketDesiredState = null
     private wsSubject: WebSocketSubject<BackendEvents> | null = null
     private wsErrors$ = new Subject<BackendError | string | undefined>()
     private _teamInfo$: BehaviorSubject<TeamInfo | null | undefined> = new BehaviorSubject<TeamInfo | null | undefined>(undefined)
     private _teamInfo: TeamInfo | null = null
     private _time$: BehaviorSubject<TimeInfo | undefined> = new BehaviorSubject<TimeInfo | undefined>(undefined)
+    private _problems$: BehaviorSubject<Problem[] | undefined> = new BehaviorSubject<Problem[] | undefined>(undefined)
+    private _problems: Problem[] = []
 
     constructor(private baseURL: string) {
+        setInterval(() => {
+            switch (this.desiredState){
+                case "started":
+                    this._start()
+                    break
+                case "stopped":
+                    this._stop()
+                    break
+                case null:
+                default:
+                    break
+            }
+        }, 1000)
     }
 
     start() {
+        this.desiredState = "started"
+    }
+    stop() {
+        this.desiredState = "stopped"
+    }
+
+    // if teamInfo gets null we got kicked
+    teamInfo(): Observable<TeamInfo | null | undefined> {
+        return this._teamInfo$
+    }
+
+    time(): Observable<TimeInfo | undefined> {
+        return this._time$
+    }
+
+    wsErrors(): Observable<BackendError | string | undefined> {
+        return this.wsErrors$
+    }
+
+    private _start() {
         if (this.wsSubject) {
             return
         }
@@ -72,10 +110,6 @@ export class SocketServiceSingleton {
                     this.handleEvent(reason)
                 }
             }
-        })
-        this.wsSubject.next({
-            // @ts-ignore
-            token: localStorage.getItem(localStorageTokenKey)
         })
         this.wsSubject.subscribe({
             next: event => this.handleEvent(event),
@@ -100,22 +134,14 @@ export class SocketServiceSingleton {
                 }, 2000)
             }
         })
-    }
-    stop() {
-        this.wsSubject?.unsubscribe()
-    }
-
-    // if teamInfo gets null we got kicked
-    teamInfo(): Observable<TeamInfo | null | undefined> {
-        return this._teamInfo$
+        this.wsSubject.next({
+            // @ts-ignore
+            token: localStorage.getItem(localStorageTokenKey)
+        })
     }
 
-    time(): Observable<TimeInfo | undefined> {
-        return this._time$
-    }
-
-    wsErrors(): Observable<BackendError | string | undefined> {
-        return this.wsErrors$
+    private _stop() {
+        this.wsSubject?.complete()
     }
 
     private handleEvent(event: BackendEvents) {
@@ -173,6 +199,54 @@ export class SocketServiceSingleton {
                     start_time: new Date(event.data.start_time * 1000),
                     end_time: new Date(event.data.end_time * 1000)
                 })
+                break
+            case "SOLUTION_SET":
+                this._problems = this._problems.map(problem => {
+                    if (problem.id === event.data.problem) {
+                        return {
+                            ...problem,
+                            solution: event.data.solution ?? null
+                        }
+                    }
+                    return problem
+                })
+                this._problems$.next(this._problems)
+                break
+
+            case "INSERT_PROBLEM":
+                if (event.data.before) {
+                    this._problems.splice(this._problems.findIndex(problem => problem.id === event.data.before), 0, {...event.data, before: undefined})
+                } else {
+                    this._problems.push(event.data)
+                }
+                this._problems$.next(this._problems)
+                break
+
+            case "DELETE_PROBLEM":
+                this._problems = this._problems.filter(problem => problem.id !== event.data.id)
+                this._problems$.next(this._problems)
+                break
+
+            case "SWAP_PROBLEMS":
+                const indexA = this._problems.findIndex(problem => problem.id === event.data.id1)
+                const indexB = this._problems.findIndex(problem => problem.id === event.data.id2)
+
+                ;[this._problems[indexA], this._problems[indexB]] = [this._problems[indexB], this._problems[indexA]]
+                this._problems$.next(this._problems)
+                break
+
+            case "UPDATE_PROBLEM":
+                this._problems = this._problems.map(problem => {
+                    if (problem.id === event.data.id) {
+                        return {
+                            ...problem,
+                            ...event.data,
+                        }
+                    }
+                    return problem
+                })
+                this._problems$.next(this._problems)
+                break
         }
     }
 }
