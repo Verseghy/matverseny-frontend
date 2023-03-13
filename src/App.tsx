@@ -10,6 +10,7 @@ import { AuthService } from './services/auth'
 import { TeamService } from './services/team'
 import { JWTService } from './services/fetch'
 import CompetitionPage from './pages/Competition'
+import EndPage from './pages/End'
 
 export const authService = new AuthService(import.meta.env.VITE_IAM_BASE_URL, import.meta.env.VITE_MATHCOMPETITION_BASE_URL)
 export const socketService = new SocketServiceSingleton(import.meta.env.VITE_MATHCOMPETITION_BASE_WS_URL)
@@ -31,6 +32,7 @@ const App: Component = () => {
           </Route>
           <Route path="/wait" component={WaitPage} />
           <Route path="/competition" component={CompetitionPage} />
+          <Route path="/end" component={EndPage} />
         </Routes>
       </Router>
     </main>
