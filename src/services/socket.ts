@@ -25,6 +25,13 @@ export interface TimeInfo {
     end_time: Date
 }
 
+export interface Problem {
+    id: string
+    body: string
+    image?: string
+    answer: number | null
+}
+
 interface BackendEvents {
     event: string
     data: any

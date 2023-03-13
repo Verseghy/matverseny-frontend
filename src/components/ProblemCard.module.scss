@@ -1,0 +1,75 @@
+@import 'src/utils';
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.6rem;
+
+  @include mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.6rem;
+  }
+
+  .titleContainer {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    .title {
+      font-size: 1.6rem;
+      font-family: 'Inter';
+      font-weight: 900;
+      margin: 0;
+    }
+
+    .spinner {
+      width: 1em;
+      height: 1em;
+      border-radius: 50%;
+      border: 0.3rem solid var(--primary);
+      border-bottom-color: transparent;
+      display: inline-block;
+      animation: spin 1.5s linear infinite;
+    }
+
+    .check {
+      color: var(--primary);
+    }
+  }
+
+  .buttons {
+    display: flex;
+    gap: 1rem;
+  }
+}
+
+.problem {
+  margin-bottom: 3.2rem;
+}
+
+.problemText {
+  margin-bottom: 1.2rem;
+}
+
+.image {
+  max-width: 100%;
+  margin: 0 auto 3.2rem;
+  border-radius: 0.6rem;
+  display: block;
+}
+
+.errorMessage {
+  margin-bottom: 1.6rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
