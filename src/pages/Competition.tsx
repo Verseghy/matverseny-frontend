@@ -137,7 +137,7 @@ const CompetitionPage: Component = () => {
     },
   ]
 
-  const paginatedProblems = usePaginate(problems, 3);
+  const paginatedProblems = usePaginate(problems, 10);
 
   const logout = () => {
     // TODO: implement logout
