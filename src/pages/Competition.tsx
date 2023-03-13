@@ -62,21 +62,21 @@ const CompetitionPage: Component = () => {
   const problems: () => Problem[] = () => [
     {
       id: '1',
-      body: '1 some random body $asdf$ dsa',
+      body: '1 some $$random$$ body $asdf$ dsa',
       image: '',
       answer: null,
     },
     {
       id: '2',
-      body: '2 some random body $asdf$ dsa',
+      body: '$\\frac{1}{\\Bigl(\\sqrt{\\phi \\sqrt{5}}-\\phi\\Bigr) e^{\\frac25 \\pi}} \\equiv 1+\\frac{e^{-2\\pi}} {1+\\frac{e^{-4\\pi}} {1+\\frac{e^{-6\\pi}} {1+\\frac{e^{-8\\pi}} {1+\\cdots} } } }$',
       image: '',
       answer: null,
     },
     {
       id: '3',
-      body: '3 some $$ random $$ body $asdf$ dsa',
+      body: '$\\mathcal L_{\\mathcal T}(\\vec{\\lambda}) = \\sum_{(\\mathbf{x},\\mathbf{s})\\in \\mathcal T} \\log P(\\mathbf{s}\\mid\\mathbf{x}) - \\sum_{i=1}^m \\frac{\\lambda_i^2}{2\\sigma^2}$',
       image: '',
-      answer: null,
+      answer: 123,
     },
     {
       id: '4',
