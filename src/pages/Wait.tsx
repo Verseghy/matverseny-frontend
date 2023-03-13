@@ -1,3 +1,4 @@
+import { createTimer } from '@solid-primitives/timer'
 import { useNavigate } from '@solidjs/router'
 import { Component, createEffect, from } from 'solid-js'
 import { jwtService, socketService } from '../App'
@@ -13,6 +14,16 @@ const WaitPage: Component = () => {
   const times = from(socketService.time())
 
   const navigate = useNavigate()
+
+  const delay = (): number | false => {
+    if (!times()) return false
+    const d = times()!.start_time.getTime() - new Date().getTime()
+    return d < 0 ? 0 : d
+  }
+
+  createTimer(() => {
+    navigate('/competition')
+  }, delay, setTimeout)
 
   createEffect(() => {
     if (!claims()) navigate('/login')

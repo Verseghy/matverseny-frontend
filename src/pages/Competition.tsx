@@ -1,3 +1,4 @@
+import { createTimer } from '@solid-primitives/timer'
 import { useNavigate } from '@solidjs/router'
 import { FaSolidChevronLeft, FaSolidChevronRight } from 'solid-icons/fa'
 import { Component, createEffect, For, from } from 'solid-js'
@@ -68,6 +69,16 @@ const CompetitionPage: Component = () => {
   const times = from(socketService.time())
   const navigate = useNavigate()
 
+  const delay = (): number | false => {
+    if (!times()) return false
+    const d = times()!.end_time.getTime() - new Date().getTime()
+    return d < 0 ? 0 : d
+  }
+
+  createTimer(() => {
+    navigate('/end')
+  }, delay, setTimeout)
+
   createEffect(() => {
     if (!claims()) navigate('/login')
     if (info() === null) navigate('/team')
@@ -85,7 +96,7 @@ const CompetitionPage: Component = () => {
           Csapat
         </Button>
         <span class={styles.timer}>
-          <Timer />
+          <Timer time={times()?.end_time} />
         </span>
         <Button onClick={authService.logout} class={styles.button}>
           Kijelentkezés

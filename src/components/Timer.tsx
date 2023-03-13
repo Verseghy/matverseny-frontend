@@ -7,6 +7,7 @@ export type TimerProps = {
 const Timer: Component<TimerProps> = (props) => {
   const [formattedTime, setFormattedTime] = createSignal('00:00:00')
 
+  // TODO: more accurate clock
   const clock = from((set) => {
     const t = setInterval(() => set(1), 1000);
     return () => clearInterval(t);
