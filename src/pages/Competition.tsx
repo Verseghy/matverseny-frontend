@@ -1,7 +1,10 @@
-import { Component, For } from 'solid-js'
+import { FaSolidChevronLeft, FaSolidChevronRight } from 'solid-icons/fa'
+import { Component, createEffect, For } from 'solid-js'
 import Button from '../components/Button'
+import Paginator from '../components/Paginator'
 import { ProblemCard } from '../components/ProblemCard'
 import Timer from '../components/Timer'
+import { usePaginate } from '../hooks/usePaginate'
 import { Problem } from '../services/socket'
 import styles from './Competition.module.scss'
 
@@ -31,13 +34,97 @@ const QuickProblemButton: Component<QuickProblemButtonProps> = (props) => {
   )
 }
 
+const PaginatorControls = <T,>(props: {
+  paginator: Paginator<T>,
+}) => {
+  console.log(props.paginator)
+
+  return (
+    <div class={styles.paginator}>
+      <Button
+        disabled={props.paginator.current === 0}
+        onClick={props.paginator.prev}
+      >
+        <FaSolidChevronLeft />
+      </Button>
+      <span>
+        {props.paginator.current + 1} / {props.paginator.last + 1}
+      </span>
+      <Button
+        disabled={props.paginator.current === props.paginator.last}
+        onClick={props.paginator.next}
+      >
+        <FaSolidChevronRight />
+      </Button>
+    </div>
+  )
+}
+
 const CompetitionPage: Component = () => {
-  const problems: () => Problem[] = () => [{
-    id: '',
-    body: 'some random body $asdf$ dsa',
-    image: '',
-    answer: null,
-  }]
+  const problems: () => Problem[] = () => [
+    {
+      id: '1',
+      body: '1 some random body $asdf$ dsa',
+      image: '',
+      answer: null,
+    },
+    {
+      id: '2',
+      body: '2 some random body $asdf$ dsa',
+      image: '',
+      answer: null,
+    },
+    {
+      id: '3',
+      body: '3 some random body $asdf$ dsa',
+      image: '',
+      answer: null,
+    },
+    {
+      id: '4',
+      body: '4 some random body $asdf$ dsa',
+      image: '',
+      answer: null,
+    },
+    {
+      id: '5',
+      body: '5 some random body $asdf$ dsa',
+      image: '',
+      answer: null,
+    },
+    {
+      id: '6',
+      body: '6 some random body $asdf$ dsa',
+      image: '',
+      answer: null,
+    },
+    {
+      id: '7',
+      body: '7 some random body $asdf$ dsa',
+      image: '',
+      answer: null,
+    },
+    {
+      id: '8',
+      body: '8 some random body $asdf$ dsa',
+      image: '',
+      answer: null,
+    },
+    {
+      id: '9',
+      body: '9 some random body $asdf$ dsa',
+      image: '',
+      answer: null,
+    },
+    {
+      id: '',
+      body: 'some random body $asdf$ dsa',
+      image: '',
+      answer: null,
+    },
+  ]
+
+  const paginatedProblems = usePaginate(problems, 3);
 
   const logout = () => {
     // TODO: implement logout
@@ -56,33 +143,26 @@ const CompetitionPage: Component = () => {
           Kijelentkezés
         </Button>
       </div>
-      {/* <Paginator */}
-      {/*   onPageSwitch={(page: number) => { */}
-      {/*     setActivePage(page) */}
-      {/*     window.scrollTo(0, 0) */}
-      {/*   }} */}
-      {/* > */}
-      {/*   <PaginatorControls /> */}
+        <PaginatorControls paginator={paginatedProblems} />
         <div class={styles.buttonsContainer}>
-          <For each={problems()}>
-            {(problem, index) => (
-              <QuickProblemButton problem={problem} index={index()} />
+          <For each={paginatedProblems()}>
+            {([problem, index]) => (
+              <QuickProblemButton problem={problem} index={index + 1} />
             )}
           </For>
         </div>
-        <For each={problems()}>
-          {(problem, index) => (
+        <For each={paginatedProblems()}>
+          {([problem, index]) => (
             <ProblemCard
               id={`card_${problem.id}`}
               class={styles.card}
-              index={index() + 1}
+              index={index + 1}
               problem={problem}
               /* onUpdate={onUpdate} */
             />
           )}
         </For>
-      {/*   <PaginatorControls /> */}
-      {/* </Paginator> */}
+        <PaginatorControls paginator={paginatedProblems} />
     </div>
   )
 }
