@@ -41,6 +41,7 @@ export const ProblemCard: Component<ProblemCardProps> = (props) => {
         block
         error={isError()}
         inputMode="numeric"
+        value={local.problem.answer ?? ''}
         onInput={(event) => {
           setDebouncedAnswer((event.target as HTMLInputElement).value)
         }}
