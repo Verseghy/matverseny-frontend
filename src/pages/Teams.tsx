@@ -406,8 +406,7 @@ export const ManageTeam: Component = () => {
             </For>
           </div>
           <div class={styles.buttonsContainer}>
-            {/* TODO: this should go to /competition */}
-            <Button block kind="primary" href="/wait" disabled={!info()!.locked}>
+            <Button block kind="primary" href="/competition" disabled={!info()!.locked}>
               Versenyhez
             </Button>
             <Show when={user()!.rank !== 'Owner'}>
