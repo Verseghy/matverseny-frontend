@@ -1,7 +1,7 @@
 import { useNavigate } from '@solidjs/router'
 import { FaSolidChevronLeft, FaSolidChevronRight } from 'solid-icons/fa'
 import { Component, createEffect, For, from } from 'solid-js'
-import { jwtService, socketService } from '../App'
+import { jwtService, socketService, solutionService } from '../App'
 import Button from '../components/Button'
 import Paginator from '../components/Paginator'
 import { ProblemCard } from '../components/ProblemCard'
@@ -165,21 +165,18 @@ const CompetitionPage: Component = () => {
           </For>
         </div>
         <For each={paginatedProblems()}>
-          {([problem, index]) => {
-            const onAnswer = (answer: number) => {
-              console.log(problem.id, answer)
-            }
-
-            return (
-              <ProblemCard
-                id={`card_${problem.id}`}
-                class={styles.card}
-                index={index + 1}
-                problem={problem}
-                onAnswer={onAnswer}
-              />
-            )
-          }}
+          {([problem, index]) => (
+            <ProblemCard
+              id={`card_${problem.id}`}
+              class={styles.card}
+              index={index + 1}
+              problem={problem}
+              onAnswer={(answer) => {
+                console.log("answer", answer)
+                solutionService.setSolution({ problem: problem.id, solution: answer })
+              }}
+            />
+          )}
         </For>
         <PaginatorControls paginator={paginatedProblems} />
     </div>

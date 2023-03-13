@@ -10,20 +10,28 @@ import { debounce } from '@solid-primitives/scheduled'
 export type ProblemCardProps = {
   index: number;
   problem: Problem;
-  onAnswer?: (answer: number) => void;
+  onAnswer?: (answer: number | null) => void;
 } & JSX.HTMLAttributes<HTMLDivElement>;
 
 export const ProblemCard: Component<ProblemCardProps> = (props) => {
-  const [local, rest] = splitProps(props, ['index', 'problem'])
+  const [local, rest] = splitProps(props, ['index', 'problem', 'onAnswer'])
 
-  const [answer, setAnswer] = createSignal('')
+  const [answer, setAnswer] = createSignal(local.problem.solution ? String(local.problem.solution) : '')
   const setDebouncedAnswer = debounce(setAnswer, 1000)
 
   const isError = () => isNaN(Number(answer())) || !Number.isSafeInteger(Number(answer()))
 
   createEffect(() => {
-    if (isError() || answer() === '') return
-    if (!!props.onAnswer) props.onAnswer(Number(answer()))
+    if (isError()) return
+    if (answer() === (local.problem.solution ? String(local.problem.solution) : '')) return
+
+    if (!!local.onAnswer) {
+      if (answer() === '') {
+        local.onAnswer(null)
+      } else {
+        local.onAnswer(Number(answer()))
+      }
+    }
   })
 
   return (
@@ -41,7 +49,7 @@ export const ProblemCard: Component<ProblemCardProps> = (props) => {
         block
         error={isError()}
         inputMode="numeric"
-        value={local.problem.answer ?? ''}
+        value={local.problem.solution ?? ''}
         onInput={(event) => {
           setDebouncedAnswer((event.target as HTMLInputElement).value)
         }}
