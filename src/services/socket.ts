@@ -1,4 +1,4 @@
-import {BehaviorSubject, Observable, of, shareReplay, Subject, tap} from "rxjs";
+import {BehaviorSubject, debounceTime, Observable, of, shareReplay, Subject, tap} from "rxjs";
 import {webSocket, WebSocketSubject} from "rxjs/webSocket";
 import {localStorageTokenKey} from "./fetch";
 import {jwtService, socketService} from "../App";
@@ -91,7 +91,9 @@ export class SocketServiceSingleton {
     }
 
     problems(): Observable<Problem[] | undefined> {
-        return this._problems$
+        return this._problems$.pipe(
+            debounceTime(1000)
+        )
     }
 
     private _start() {
@@ -120,6 +122,7 @@ export class SocketServiceSingleton {
             complete: () => {
                 this.wsSubject = null
                 this._teamInfo = null
+                this._problems = []
                 this._time$.next(undefined)
             },
             error: (err) => {
@@ -133,9 +136,8 @@ export class SocketServiceSingleton {
                     console.log(err.reason)
                 }
                 console.error(err)
-                setTimeout(() => {
-                    this.start()
-                }, 2000)
+                this._teamInfo = null
+                this._problems = []
             }
         })
         this.wsSubject.next({
