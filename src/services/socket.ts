@@ -1,10 +1,10 @@
-import {BehaviorSubject, debounceTime, Observable, of, shareReplay, Subject, tap} from "rxjs";
-import {webSocket, WebSocketSubject} from "rxjs/webSocket";
-import {localStorageTokenKey} from "./fetch";
-import {jwtService, socketService} from "../App";
+import { BehaviorSubject, debounceTime, Observable, Subject } from 'rxjs'
+import { webSocket, WebSocketSubject} from 'rxjs/webSocket'
+import { localStorageTokenKey} from './fetch'
+import { jwtService } from '../App'
 
 export type MemberClass = 9 | 10 | 11 | 12
-export type MemberRank = "Owner" | "CoOwner" | "Member"
+export type MemberRank = 'Owner' | 'CoOwner' | 'Member'
 
 export interface TeamMember {
     id: string
@@ -42,7 +42,7 @@ export interface BackendError {
     error: string
 }
 
-type SocketDesiredState  = null | "started" | "stopped"
+type SocketDesiredState  = null | 'started' | 'stopped'
 
 export class SocketServiceSingleton {
     private desiredState: SocketDesiredState = null
@@ -57,10 +57,10 @@ export class SocketServiceSingleton {
     constructor(private baseURL: string) {
         setInterval(() => {
             switch (this.desiredState){
-                case "started":
+                case 'started':
                     this._start()
                     break
-                case "stopped":
+                case 'stopped':
                     this._stop()
                     break
                 case null:
@@ -71,10 +71,10 @@ export class SocketServiceSingleton {
     }
 
     start() {
-        this.desiredState = "started"
+        this.desiredState = 'started'
     }
     stop() {
-        this.desiredState = "stopped"
+        this.desiredState = 'stopped'
     }
 
     // if teamInfo gets null we got kicked
@@ -105,7 +105,7 @@ export class SocketServiceSingleton {
             closeObserver: {
                 next: (e) => {
                     const reason = JSON.parse(e.reason)
-                    if (reason.code === "M011") {
+                    if (reason.code === 'M011') {
                         this._teamInfo = null
                         this._teamInfo$.next(null)
                         return
@@ -152,16 +152,16 @@ export class SocketServiceSingleton {
 
     private handleEvent(event: BackendEvents) {
         switch (event.event) {
-            case "TEAM_INFO":
+            case 'TEAM_INFO':
                 this._teamInfo = event.data
                 this._teamInfo$.next(this._teamInfo)
                 break
-            case "JOIN_TEAM":
+            case 'JOIN_TEAM':
                 this._teamInfo?.members.push({id: event.data.user, name: event.data.name})
                 this._teamInfo$.next(this._teamInfo)
                 break
-            case "KICK_USER":
-            case "LEAVE_TEAM":
+            case 'KICK_USER':
+            case 'LEAVE_TEAM':
                 if (!this._teamInfo) break
                 this._teamInfo.members = this._teamInfo?.members.filter(member => member.id !== event.data.user)
                 if (jwtService.getClaimsOnce()?.sub.endsWith(event.data.user)) {
@@ -170,7 +170,7 @@ export class SocketServiceSingleton {
                 }
                 this._teamInfo$.next(this._teamInfo)
                 break
-            case "UPDATE_TEAM":
+            case 'UPDATE_TEAM':
                 if (!this._teamInfo) break
                 this._teamInfo = {
                     ...this._teamInfo,
@@ -181,7 +181,7 @@ export class SocketServiceSingleton {
                     this._teamInfo.members =this._teamInfo?.members.map(m => {
                         return {
                             ...m,
-                            rank: m.rank !== "Owner" ? (m.id === event.data.co_owner ? "CoOwner" : "Member") : "Owner"
+                            rank: m.rank !== 'Owner' ? (m.id === event.data.co_owner ? 'CoOwner' : 'Member') : 'Owner'
                         }
                     })
                 }
@@ -190,23 +190,23 @@ export class SocketServiceSingleton {
                     this._teamInfo.members =this._teamInfo?.members.map(m => {
                         return {
                             ...m,
-                            rank: m.rank === "Owner" ? "Owner" : "Member"
+                            rank: m.rank === 'Owner' ? 'Owner' : 'Member'
                         }
                     })
                 }
                 this._teamInfo$.next(this._teamInfo)
                 break
-            case "DISBAND_TEAM":
+            case 'DISBAND_TEAM':
                 this._teamInfo$.next(null)
                 break
 
-            case "UPDATE_TIME":
+            case 'UPDATE_TIME':
                 this._time$.next({
                     start_time: new Date(event.data.start_time * 1000),
                     end_time: new Date(event.data.end_time * 1000)
                 })
                 break
-            case "SOLUTION_SET":
+            case 'SOLUTION_SET':
                 this._problems = this._problems.map(problem => {
                     if (problem.id === event.data.problem) {
                         return {
@@ -219,7 +219,7 @@ export class SocketServiceSingleton {
                 this._problems$.next(this._problems)
                 break
 
-            case "INSERT_PROBLEM":
+            case 'INSERT_PROBLEM':
                 if (event.data.before) {
                     this._problems.splice(this._problems.findIndex(problem => problem.id === event.data.before), 0, {...event.data, before: undefined})
                 } else {
@@ -228,12 +228,12 @@ export class SocketServiceSingleton {
                 this._problems$.next(this._problems)
                 break
 
-            case "DELETE_PROBLEM":
+            case 'DELETE_PROBLEM':
                 this._problems = this._problems.filter(problem => problem.id !== event.data.id)
                 this._problems$.next(this._problems)
                 break
 
-            case "SWAP_PROBLEMS":
+            case 'SWAP_PROBLEMS':
                 const indexA = this._problems.findIndex(problem => problem.id === event.data.id1)
                 const indexB = this._problems.findIndex(problem => problem.id === event.data.id2)
 
@@ -241,7 +241,7 @@ export class SocketServiceSingleton {
                 this._problems$.next(this._problems)
                 break
 
-            case "UPDATE_PROBLEM":
+            case 'UPDATE_PROBLEM':
                 this._problems = this._problems.map(problem => {
                     if (problem.id === event.data.id) {
                         return {
