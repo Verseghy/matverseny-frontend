@@ -61,6 +61,19 @@ const PaginatorControls = <T,>(props: {
 }
 
 const CompetitionPage: Component = () => {
+  socketService.start()
+
+  const info = from(socketService.teamInfo())
+  const claims = from(jwtService.getClaims())
+  const times = from(socketService.time())
+  const navigate = useNavigate()
+
+  createEffect(() => {
+    if (!claims()) navigate('/login')
+    if (info() === null) navigate('/team')
+    if (times() && times()!.start_time > new Date()) navigate('/wait')
+  })
+
   const problems: () => Problem[] = () => [
     {
       id: '1',
