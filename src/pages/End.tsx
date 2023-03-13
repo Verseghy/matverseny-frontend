@@ -13,13 +13,13 @@ const EndPage: VoidComponent = () => {
         <p>Köszönjük, hogy részt vettetek a versenyen.</p>
         <p>A feladatsor alkotóközössége és technikai háttere:</p>
         <ul>
-          <li>Vágó Csaba (VFG)</li>
-          <li>Pécsi István (VFG)</li>
-          <li>Drávucz Anita (VFG)</li>
-          <li>Tornyi Bálint (VFG)</li>
           <li>Deák Gergely (VFG)</li>
+          <li>Drávucz Anita (VFG)</li>
+          <li>Pécsi István (VFG)</li>
           <li>Szepesi Tibor (ELTE)</li>
           <li>Szepesi Zoltán (IBM)</li>
+          <li>Tornyi Bálint (VFG)</li>
+          <li>Vágó Csaba (VFG)</li>
         </ul>
       </Card>
     </div>
