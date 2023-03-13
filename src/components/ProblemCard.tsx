@@ -1,4 +1,4 @@
-import { Component, createSignal, JSX, Show, splitProps } from 'solid-js'
+import { Component, createEffect, createSignal, JSX, Show, splitProps } from 'solid-js'
 import { Problem } from '../services/socket'
 import Card from './Card'
 import styles from './ProblemCard.module.scss'
@@ -7,17 +7,24 @@ import Input from './Input'
 import { debounce } from '@solid-primitives/scheduled'
 
 
-export interface ProblemCardProps extends JSX.HTMLAttributes<HTMLDivElement> {
-  index: number
-  problem: Problem
-  /* isLoading?: boolean */
-}
+export type ProblemCardProps = {
+  index: number;
+  problem: Problem;
+  onAnswer?: (answer: number) => void;
+} & JSX.HTMLAttributes<HTMLDivElement>;
 
 export const ProblemCard: Component<ProblemCardProps> = (props) => {
   const [local, rest] = splitProps(props, ['index', 'problem'])
 
   const [answer, setAnswer] = createSignal('')
   const setDebouncedAnswer = debounce(setAnswer, 1000)
+
+  const isError = () => isNaN(Number(answer())) || !Number.isSafeInteger(Number(answer()))
+
+  createEffect(() => {
+    if (isError() || answer() === '') return
+    if (!!props.onAnswer) props.onAnswer(Number(answer()))
+  })
 
   return (
     <Card {...rest}>
@@ -32,7 +39,7 @@ export const ProblemCard: Component<ProblemCardProps> = (props) => {
       </Show>
       <Input
         block
-        error={isNaN(Number(answer())) || !Number.isSafeInteger(Number(answer()))}
+        error={isError()}
         inputMode="numeric"
         onInput={(event) => {
           setDebouncedAnswer((event.target as HTMLInputElement).value)

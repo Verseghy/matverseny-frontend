@@ -37,8 +37,6 @@ const QuickProblemButton: Component<QuickProblemButtonProps> = (props) => {
 const PaginatorControls = <T,>(props: {
   paginator: Paginator<T>,
 }) => {
-  console.log(props.paginator)
-
   return (
     <div class={styles.paginator}>
       <Button
@@ -76,7 +74,7 @@ const CompetitionPage: Component = () => {
     },
     {
       id: '3',
-      body: '3 some random body $asdf$ dsa',
+      body: '3 some $$ random $$ body $asdf$ dsa',
       image: '',
       answer: null,
     },
@@ -152,15 +150,21 @@ const CompetitionPage: Component = () => {
           </For>
         </div>
         <For each={paginatedProblems()}>
-          {([problem, index]) => (
-            <ProblemCard
-              id={`card_${problem.id}`}
-              class={styles.card}
-              index={index + 1}
-              problem={problem}
-              /* onUpdate={onUpdate} */
-            />
-          )}
+          {([problem, index]) => {
+            const onAnswer = (answer: number) => {
+              console.log(problem.id, answer)
+            }
+
+            return (
+              <ProblemCard
+                id={`card_${problem.id}`}
+                class={styles.card}
+                index={index + 1}
+                problem={problem}
+                onAnswer={onAnswer}
+              />
+            )
+          }}
         </For>
         <PaginatorControls paginator={paginatedProblems} />
     </div>
