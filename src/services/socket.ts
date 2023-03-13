@@ -90,6 +90,10 @@ export class SocketServiceSingleton {
         return this.wsErrors$
     }
 
+    problems(): Observable<Problem[] | undefined> {
+        return this._problems$
+    }
+
     private _start() {
         if (this.wsSubject) {
             return
