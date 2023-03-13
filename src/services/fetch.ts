@@ -23,8 +23,12 @@ export interface JWTClaims {
 export class JWTService {
     private _jwtToken$ = new BehaviorSubject<string | undefined>(undefined)
 
-    setToken(t: string) {
-        localStorage.setItem(localStorageTokenKey, t)
+    setToken(t: string | undefined) {
+        if (t) {
+          localStorage.setItem(localStorageTokenKey, t)
+        } else {
+          localStorage.removeItem(localStorageTokenKey)
+        }
         this._jwtToken$.next(t)
     }
 

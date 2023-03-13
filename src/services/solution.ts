@@ -1,4 +1,4 @@
-import {Observable, of, switchMap} from "rxjs";
+import {Observable, switchMap} from "rxjs";
 import {fromFetch} from "rxjs/internal/observable/dom/fetch";
 import {baseFetchRequest} from "./fetch";
 
@@ -7,7 +7,7 @@ export class SolutionService {
     }
 
     setSolution({problem, solution}: {problem: string, solution: number | null}): Observable<void> {
-        return fromFetch(`${this.baseURLMathCompetition}/team/create`, {
+        return fromFetch(`${this.baseURLMathCompetition}/competition/solution`, {
             ...baseFetchRequest(),
             method: "POST",
             body: JSON.stringify({
