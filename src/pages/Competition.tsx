@@ -1,7 +1,7 @@
 import { useNavigate } from '@solidjs/router'
 import { FaSolidChevronLeft, FaSolidChevronRight } from 'solid-icons/fa'
 import { Component, createEffect, For, from } from 'solid-js'
-import { jwtService, socketService, solutionService } from '../App'
+import { authService, jwtService, socketService, solutionService } from '../App'
 import Button from '../components/Button'
 import Paginator from '../components/Paginator'
 import { ProblemCard } from '../components/ProblemCard'
@@ -74,74 +74,9 @@ const CompetitionPage: Component = () => {
     if (times() && times()!.start_time > new Date()) navigate('/wait')
   })
 
-  const problems: () => Problem[] = () => [
-    {
-      id: '1',
-      body: '1 some $$random$$ body $asdf$ dsa',
-      image: '',
-      solution: null,
-    },
-    {
-      id: '2',
-      body: '$\\frac{1}{\\Bigl(\\sqrt{\\phi \\sqrt{5}}-\\phi\\Bigr) e^{\\frac25 \\pi}} \\equiv 1+\\frac{e^{-2\\pi}} {1+\\frac{e^{-4\\pi}} {1+\\frac{e^{-6\\pi}} {1+\\frac{e^{-8\\pi}} {1+\\cdots} } } }$',
-      image: '',
-      solution: null,
-    },
-    {
-      id: '3',
-      body: '$\\mathcal L_{\\mathcal T}(\\vec{\\lambda}) = \\sum_{(\\mathbf{x},\\mathbf{s})\\in \\mathcal T} \\log P(\\mathbf{s}\\mid\\mathbf{x}) - \\sum_{i=1}^m \\frac{\\lambda_i^2}{2\\sigma^2}$',
-      image: '',
-      solution: 123,
-    },
-    {
-      id: '4',
-      body: '4 some random body $asdf$ dsa',
-      image: '',
-      solution: null,
-    },
-    {
-      id: '5',
-      body: '5 some random body $asdf$ dsa',
-      image: '',
-      solution: null,
-    },
-    {
-      id: '6',
-      body: '6 some random body $asdf$ dsa',
-      image: '',
-      solution: null,
-    },
-    {
-      id: '7',
-      body: '7 some random body $asdf$ dsa',
-      image: '',
-      solution: null,
-    },
-    {
-      id: '8',
-      body: '8 some random body $asdf$ dsa',
-      image: '',
-      solution: null,
-    },
-    {
-      id: '9',
-      body: '9 some random body $asdf$ dsa',
-      image: '',
-      solution: null,
-    },
-    {
-      id: '',
-      body: 'some random body $asdf$ dsa',
-      image: '',
-      solution: null,
-    },
-  ]
+  const problems = from(socketService.problems())
 
-  const paginatedProblems = usePaginate(problems, 10);
-
-  const logout = () => {
-    // TODO: implement logout
-  }
+  const paginatedProblems = usePaginate(() => problems() ?? [], 10);
 
   return (
     <div class={styles.container}>
@@ -152,7 +87,7 @@ const CompetitionPage: Component = () => {
         <span class={styles.timer}>
           <Timer />
         </span>
-        <Button onClick={logout} class={styles.button}>
+        <Button onClick={authService.logout} class={styles.button}>
           Kijelentkezés
         </Button>
       </div>
@@ -173,7 +108,7 @@ const CompetitionPage: Component = () => {
               problem={problem}
               onAnswer={(answer) => {
                 console.log("answer", answer)
-                solutionService.setSolution({ problem: problem.id, solution: answer })
+                solutionService.setSolution({ problem: problem.id, solution: answer }).subscribe()
               }}
             />
           )}
