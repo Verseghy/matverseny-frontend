@@ -105,6 +105,8 @@ export class SocketServiceSingleton {
             closeObserver: {
                 next: (e) => {
                     this.wsSubject = null
+                    this._teamInfo = null
+                    this._problems = []
                     const reason = JSON.parse(e.reason)
                     if (reason.code === 'M011') {
                         this._teamInfo = null
