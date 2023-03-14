@@ -104,6 +104,7 @@ export class SocketServiceSingleton {
             url: `${this.baseURL}/ws`,
             closeObserver: {
                 next: (e) => {
+                    this.wsSubject = null
                     const reason = JSON.parse(e.reason)
                     if (reason.code === 'M011') {
                         this._teamInfo = null
@@ -149,6 +150,7 @@ export class SocketServiceSingleton {
 
     private _stop() {
         this.wsSubject?.complete()
+        this.wsSubject = null
     }
 
     private handleEvent(event: BackendEvents) {
