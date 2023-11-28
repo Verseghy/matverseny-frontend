@@ -11,7 +11,7 @@ const LandingPage: Component = () => {
     <div class={styles.container}>
       <Card class={styles.card}>
         <h1>
-          Verseghy <span>192</span>
+          Verseghy <span>193</span>
         </h1>
         <p>
           A versenyzők az oldalon tudnak regisztrálni. A csapatvezető bejelentkezés után létre tud
