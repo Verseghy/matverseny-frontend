@@ -12,7 +12,7 @@ metadata:
   namespace: matverseny-frontend
 spec:
   rules:
-    - host: 192.verseghy-gimnazium.net
+    - host: 193.verseghy-gimnazium.net
       http:
         paths:
           - path: /
@@ -24,5 +24,5 @@ spec:
                   number: 80
   tls:
     - hosts:
-        - 192.verseghy-gimnazium.net
+        - 193.verseghy-gimnazium.net
       secretName: ingress-tls
