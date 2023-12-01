@@ -1,12 +1,19 @@
-FROM node:latest as node
+FROM node:20-slim AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+COPY . /app
 WORKDIR /app
-RUN curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
-COPY . .
-RUN pnpm install --frozen-lockfile --prod
+
+FROM base AS prod-deps
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+
+FROM base AS build
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build
 
 FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY mime.types /etc/nginx/mime.types
-COPY --from=node /app/dist /usr/share/nginx/html/
+COPY --from=build /app/dist /usr/share/nginx/html/
