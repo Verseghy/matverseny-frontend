@@ -38,7 +38,9 @@ export class JWTService {
             return undefined
         }
         const claims = jwt_decode<JWTClaims>(localStorage.getItem(localStorageTokenKey)!)
-        if (new Date(claims.exp * 1000) < new Date()) {
+        const date = new Date()
+        date.setHours(0, 0, 0, 0)
+        if (new Date(claims.exp * 1000) < date) {
             return undefined
         }
         return claims
@@ -51,7 +53,9 @@ export class JWTService {
                     return undefined
                 }
                 const claims = jwt_decode<JWTClaims>(localStorage.getItem(localStorageTokenKey)!)
-                if (new Date(claims.exp * 1000) < new Date()) {
+                const date = new Date()
+                date.setHours(0, 0, 0, 0)
+                if (new Date(claims.exp * 1000) < date) {
                     return undefined
                 }
                 return claims
