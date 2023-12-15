@@ -76,8 +76,9 @@ const CompetitionPage: Component = () => {
   }
 
   createTimer(() => {
+    if (delay() === false || delay() > 0) return
     navigate('/end')
-  }, delay, setTimeout)
+  }, 1000, setInterval)
 
   createEffect(() => {
     if (!claims()) navigate('/login')
