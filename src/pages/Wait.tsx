@@ -22,8 +22,9 @@ const WaitPage: Component = () => {
   }
 
   createTimer(() => {
+    if (delay() === false || delay() > 0) return
     navigate('/competition')
-  }, delay, setTimeout)
+  }, 1000, setInterval)
 
   createEffect(() => {
     if (!claims()) navigate('/login')

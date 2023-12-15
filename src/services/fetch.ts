@@ -18,6 +18,7 @@ export const baseFetchRequest: () => Request = () => ({
 
 export interface JWTClaims {
     sub: string
+    exp: number
 }
 
 export class JWTService {
@@ -36,7 +37,11 @@ export class JWTService {
         if (!localStorage.getItem(localStorageTokenKey)) {
             return undefined
         }
-        return jwt_decode<JWTClaims>(localStorage.getItem(localStorageTokenKey)!)
+        const claims = jwt_decode<JWTClaims>(localStorage.getItem(localStorageTokenKey)!)
+        if (new Date(claims.exp * 1000) < new Date()) {
+            return undefined
+        }
+        return claims
     }
 
     getClaims(): Observable<JWTClaims | undefined> {
@@ -45,7 +50,11 @@ export class JWTService {
                 if (!localStorage.getItem(localStorageTokenKey)) {
                     return undefined
                 }
-                return jwt_decode<JWTClaims>(localStorage.getItem(localStorageTokenKey)!)
+                const claims = jwt_decode<JWTClaims>(localStorage.getItem(localStorageTokenKey)!)
+                if (new Date(claims.exp * 1000) < new Date()) {
+                    return undefined
+                }
+                return claims
             })
         )
     }
