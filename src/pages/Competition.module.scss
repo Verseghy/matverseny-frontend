@@ -1,4 +1,4 @@
-@import 'src/utils';
+@use 'src/utils' as *;
 
 .container {
   width: 75rem;

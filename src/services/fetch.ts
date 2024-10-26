@@ -1,4 +1,4 @@
-import jwt_decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import {BehaviorSubject, map, Observable} from "rxjs";
 
 export const localStorageTokenKey = "IAMToken"
@@ -37,7 +37,7 @@ export class JWTService {
         if (!localStorage.getItem(localStorageTokenKey)) {
             return undefined
         }
-        const claims = jwt_decode<JWTClaims>(localStorage.getItem(localStorageTokenKey)!)
+        const claims = jwtDecode<JWTClaims>(localStorage.getItem(localStorageTokenKey)!)
         const date = new Date()
         date.setHours(0, 0, 0, 0)
         if (new Date(claims.exp * 1000) < date) {
@@ -52,7 +52,7 @@ export class JWTService {
                 if (!localStorage.getItem(localStorageTokenKey)) {
                     return undefined
                 }
-                const claims = jwt_decode<JWTClaims>(localStorage.getItem(localStorageTokenKey)!)
+                const claims = jwtDecode<JWTClaims>(localStorage.getItem(localStorageTokenKey)!)
                 const date = new Date()
                 date.setHours(0, 0, 0, 0)
                 if (new Date(claims.exp * 1000) < date) {

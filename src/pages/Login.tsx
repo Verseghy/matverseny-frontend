@@ -1,4 +1,4 @@
-import { useNavigate } from "@solidjs/router"
+import { RouteSectionProps, useNavigate } from "@solidjs/router"
 import { firstValueFrom } from "rxjs"
 import { Component, createEffect, createSignal, from } from "solid-js"
 import * as Yup from 'yup'
@@ -14,7 +14,7 @@ const schema = Yup.object({
   password: Yup.string().required('Jelszó kötelező'),
 })
 
-const LoginPage: Component = () => {
+const LoginPage: Component<RouteSectionProps<void>> = () => {
   const claims = from(jwtService.getClaims())
   const navigate = useNavigate()
 

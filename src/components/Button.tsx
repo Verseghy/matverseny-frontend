@@ -1,4 +1,4 @@
-import { Link } from '@solidjs/router'
+import { A } from '@solidjs/router'
 import { Component, JSX, Show, splitProps } from 'solid-js'
 import styles from './Button.module.scss'
 
@@ -13,7 +13,7 @@ const Button: Component<ButtonProps> = (props) => {
   const [local, rest] = splitProps(props, ['children', 'kind', 'block', 'label', 'href', 'class'])
 
   const link = () => (
-    <Link
+    <A
       href={local.href!}
       classList={{
         [styles.button]: true,
@@ -23,7 +23,7 @@ const Button: Component<ButtonProps> = (props) => {
       }}
     >
       {local.children}
-    </Link>
+    </A>
   )
 
   const label = () => (

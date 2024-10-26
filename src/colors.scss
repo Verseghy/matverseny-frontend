@@ -1,4 +1,4 @@
-@import 'src/utils';
+@use 'src/utils' as *;
 
 :root {
   --red: hsl(0, 72%, 51%);

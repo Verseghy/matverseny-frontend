@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { Route, Router, Routes } from '@solidjs/router'
+import { Route, Router } from '@solidjs/router'
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/Login'
 import RegisterPage from './pages/Register'
@@ -23,19 +23,17 @@ const App: Component = () => {
   return (
     <main>
       <Router>
-        <Routes>
-          <Route path="/" component={LandingPage} />
-          <Route path="/login" component={LoginPage} />
-          <Route path="/register" component={RegisterPage} />
-          <Route path="/team">
-            <Route path="/" component={JoinTeam} />
-            <Route path="/create" component={CreateTeam} />
-            <Route path="/manage" component={ManageTeam} />
-          </Route>
-          <Route path="/wait" component={WaitPage} />
-          <Route path="/competition" component={CompetitionPage} />
-          <Route path="/end" component={EndPage} />
-        </Routes>
+        <Route path="/" component={LandingPage} />
+        <Route path="/login" component={LoginPage} />
+        <Route path="/register" component={RegisterPage} />
+        <Route path="/team">
+          <Route path="/" component={JoinTeam} />
+          <Route path="/create" component={CreateTeam} />
+          <Route path="/manage" component={ManageTeam} />
+        </Route>
+        <Route path="/wait" component={WaitPage} />
+        <Route path="/competition" component={CompetitionPage} />
+        <Route path="/end" component={EndPage} />
       </Router>
     </main>
   );

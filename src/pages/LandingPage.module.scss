@@ -1,4 +1,4 @@
-@import 'src/utils';
+@use 'src/utils' as *;
 
 .container {
   display: grid;

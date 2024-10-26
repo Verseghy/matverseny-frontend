@@ -1,9 +1,10 @@
-import { VoidComponent } from 'solid-js'
+import { Component } from 'solid-js'
 import { socketService } from '../App'
 import Card from '../components/Card'
 import styles from './End.module.scss'
+import { RouteSectionProps } from '@solidjs/router'
 
-const EndPage: VoidComponent = () => {
+const EndPage: Component<RouteSectionProps<void>> = () => {
   socketService.stop()
 
   return (
