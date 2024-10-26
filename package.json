@@ -9,6 +9,7 @@
     "serve": "vite preview"
   },
   "license": "AGPL-3.0",
+  "private": true,
   "devDependencies": {
     "@types/katex": "^0.16.7",
     "sass": "^1.80.4",
