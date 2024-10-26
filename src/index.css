@@ -9,6 +9,11 @@
 
 html {
   font-size: 10px;
+  color-scheme: light dark;
+
+  &.dark-theme {
+    color-scheme: dark;
+  }
 }
 
 body {
