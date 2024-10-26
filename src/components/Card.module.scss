@@ -1,4 +1,4 @@
-@import 'src/utils';
+@use 'src/utils' as *;
 
 .card {
   padding: 3.2rem;

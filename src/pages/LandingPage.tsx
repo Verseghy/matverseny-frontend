@@ -5,8 +5,9 @@ import Card from '../components/Card'
 import { setTheme, theme } from '../utils/theme'
 import styles from './LandingPage.module.scss'
 import { FaSolidPhone, FaSolidEnvelope } from 'solid-icons/fa'
+import { RouteSectionProps } from '@solidjs/router'
 
-const LandingPage: Component = () => {
+const LandingPage: Component<RouteSectionProps<void>> = () => {
   return (
     <div class={styles.container}>
       <Card class={styles.card}>

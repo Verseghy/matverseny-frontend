@@ -11,9 +11,9 @@ import { jwtService, socketService, teamService } from '../App'
 import { CopyButton } from '../components/CopyButton'
 import { firstValueFrom } from 'rxjs'
 import { TeamMember } from '../services/socket'
-import { useNavigate } from '@solidjs/router'
+import { RouteSectionProps, useNavigate } from '@solidjs/router'
 
-export const JoinTeam: Component = () => {
+export const JoinTeam: Component<RouteSectionProps<void>> = () => {
   socketService.start()
 
   const info = from(socketService.teamInfo())
@@ -81,7 +81,7 @@ const createTeamScheme = Yup.object({
 })
 
 
-export const CreateTeam: Component = () => {
+export const CreateTeam: Component<RouteSectionProps<void>> = () => {
   socketService.start()
 
   const info = from(socketService.teamInfo())
@@ -175,7 +175,7 @@ export const CreateTeam: Component = () => {
   )
 }
 
-export const ManageTeam: Component = () => {
+export const ManageTeam: Component<RouteSectionProps<void>> = () => {
   socketService.start()
 
   const info = from(socketService.teamInfo())

@@ -1,5 +1,5 @@
 import { createTimer } from '@solid-primitives/timer'
-import { useNavigate } from '@solidjs/router'
+import { RouteSectionProps, useNavigate } from '@solidjs/router'
 import { FaSolidChevronLeft, FaSolidChevronRight } from 'solid-icons/fa'
 import { Component, createEffect, For, from } from 'solid-js'
 import { authService, jwtService, socketService, solutionService } from '../App'
@@ -61,7 +61,7 @@ const PaginatorControls = <T,>(props: {
   )
 }
 
-const CompetitionPage: Component = () => {
+const CompetitionPage: Component<RouteSectionProps<void>> = () => {
   socketService.start()
 
   const info = from(socketService.teamInfo())
