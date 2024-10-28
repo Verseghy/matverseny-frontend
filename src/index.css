@@ -9,6 +9,15 @@
 
 html {
   font-size: 10px;
+  color-scheme: light dark;
+
+  &.force-dark-theme {
+    color-scheme: dark;
+  }
+
+  &.force-light-theme {
+    color-scheme: light;
+  }
 }
 
 body {
