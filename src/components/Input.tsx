@@ -6,7 +6,6 @@ export interface InputProps extends JSX.InputHTMLAttributes<HTMLInputElement> {
   error?: boolean
 }
 
-
 const Input: Component<InputProps> = (props) => {
   const [local, rest] = splitProps(props, ['block', 'error', 'class'])
 

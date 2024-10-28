@@ -6,12 +6,11 @@ import KaTeX from 'katex'
 import Input from './Input'
 import { debounce } from '@solid-primitives/scheduled'
 
-
 export type ProblemCardProps = {
-  index: number;
-  problem: Problem;
-  onAnswer?: (answer: number | null) => void;
-} & JSX.HTMLAttributes<HTMLDivElement>;
+  index: number
+  problem: Problem
+  onAnswer?: (answer: number | null) => void
+} & JSX.HTMLAttributes<HTMLDivElement>
 
 export const ProblemCard: Component<ProblemCardProps> = (props) => {
   const [local, rest] = splitProps(props, ['index', 'problem', 'onAnswer'])
@@ -89,7 +88,6 @@ const formatText = (problemText: string): string => {
     })
     text = text.replace(i, a)
   }
-
 
   return text
 }

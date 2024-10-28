@@ -1,12 +1,12 @@
-import { RouteSectionProps, useNavigate } from "@solidjs/router"
-import { firstValueFrom } from "rxjs"
-import { Component, createEffect, createSignal, from } from "solid-js"
+import { RouteSectionProps, useNavigate } from '@solidjs/router'
+import { firstValueFrom } from 'rxjs'
+import { Component, createEffect, createSignal, from } from 'solid-js'
 import * as Yup from 'yup'
-import { authService, jwtService } from "../App"
-import Button from "../components/Button"
-import Card from "../components/Card"
-import ErrorMessage from "../components/ErrorMessage"
-import FormField from "../components/FormField"
+import { authService, jwtService } from '../App'
+import Button from '../components/Button'
+import Card from '../components/Card'
+import ErrorMessage from '../components/ErrorMessage'
+import FormField from '../components/FormField'
 import styles from './Login.module.scss'
 
 const schema = Yup.object({
@@ -25,8 +25,8 @@ const LoginPage: Component<RouteSectionProps<void>> = () => {
   const [isPending, setIsPending] = createSignal(false)
   const [errorCode, setErrorCode] = createSignal('')
 
-  const [emailError, setEmailError] = createSignal('');
-  const [passwordError, setPasswordError] = createSignal('');
+  const [emailError, setEmailError] = createSignal('')
+  const [passwordError, setPasswordError] = createSignal('')
 
   const [emailDirty, setEmailDirty] = createSignal(false)
   const [passwordDirty, setPasswordDirty] = createSignal(false)
@@ -125,12 +125,7 @@ const LoginPage: Component<RouteSectionProps<void>> = () => {
             <Button href="/register" block>
               Regisztráció
             </Button>
-            <Button
-              class={styles.button}
-              kind="primary"
-              disabled={isPending()}
-              type="submit"
-            >
+            <Button class={styles.button} kind="primary" disabled={isPending()} type="submit">
               Bejelentkezés
             </Button>
           </div>

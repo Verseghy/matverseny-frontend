@@ -1,7 +1,7 @@
 import { Component, createRenderEffect, createSignal, from } from 'solid-js'
 
 export type TimerProps = {
-  time?: Date,
+  time?: Date
 }
 
 const Timer: Component<TimerProps> = (props) => {
@@ -9,9 +9,9 @@ const Timer: Component<TimerProps> = (props) => {
 
   // TODO: more accurate clock
   const clock = from((set) => {
-    const t = setInterval(() => set(1), 1000);
-    return () => clearInterval(t);
-  });
+    const t = setInterval(() => set(1), 1000)
+    return () => clearInterval(t)
+  })
 
   createRenderEffect(() => {
     clock()

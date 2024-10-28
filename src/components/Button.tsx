@@ -58,14 +58,11 @@ const Button: Component<ButtonProps> = (props) => {
     <>
       <Show
         when={local.href}
-        fallback={(
-          <Show
-            when={local.label}
-            fallback={normal()}
-          >
+        fallback={
+          <Show when={local.label} fallback={normal()}>
             {label()}
           </Show>
-        )}
+        }
       >
         {link()}
       </Show>
