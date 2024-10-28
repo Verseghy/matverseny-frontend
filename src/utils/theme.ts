@@ -1,36 +1,32 @@
-import { createEffect, createRenderEffect } from 'solid-js'
+import { createRenderEffect, untrack } from 'solid-js'
 import { createLocalStore } from './store'
 import { usePrefersDark } from '@solid-primitives/media'
 
 
-export type Theme = 'light' | 'dark'
+export type Theme = 'light' | 'dark' | 'auto'
 
-const [storeTheme, setStoreTheme] = createLocalStore<{theme: Theme | null}>('theme', { theme: null })
+const [storeTheme, setStoreTheme] = createLocalStore<{theme: Theme}>('theme', { theme: 'auto' })
 
-export const theme = () => storeTheme.theme ?? 'light'
+export const theme = () => storeTheme.theme == 'auto' ? getPrefersDark() : storeTheme.theme
 export const setTheme = (theme: Theme) => setStoreTheme({ theme })
-
 const html = document.querySelector('html')!
+
 createRenderEffect(() => {
-  if (storeTheme.theme === 'light') {
-    html.classList.remove('dark-theme')
-  } else {
-    html.classList.add('dark-theme')
+  switch (storeTheme.theme) {
+    case 'dark':
+      html.classList.remove('force-light-theme')
+      html.classList.add('force-dark-theme')
+      break
+    case 'light':
+      html.classList.remove('force-dark-theme')
+      html.classList.add('force-light-theme')
+      break
+    case 'auto':
+      html.classList.remove('force-dark-theme')
+      html.classList.remove('force-light-theme')
+      break
   }
 })
 
-
 const prefersDark = usePrefersDark()
-
-if (storeTheme.theme === null) {
-  setTheme(prefersDark() ? 'dark' : 'light')
-}
-
-createEffect((prev) => {
-  prefersDark()
-  if (!prev) return true
-  setTheme(prefersDark() ? 'dark' : 'light')
-  return true
-}, false)
-
-setTheme(theme())
+const getPrefersDark = () => untrack(prefersDark) ? 'dark' : 'light'

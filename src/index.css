@@ -11,8 +11,12 @@ html {
   font-size: 10px;
   color-scheme: light dark;
 
-  &.dark-theme {
+  &.force-dark-theme {
     color-scheme: dark;
+  }
+
+  &.force-light-theme {
+    color-scheme: light;
   }
 }
 
