@@ -18,4 +18,3 @@ const Card: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => {
 }
 
 export default Card
-

@@ -2,12 +2,11 @@ import { createRenderEffect, untrack } from 'solid-js'
 import { createLocalStore } from './store'
 import { usePrefersDark } from '@solid-primitives/media'
 
-
 export type Theme = 'light' | 'dark' | 'auto'
 
-const [storeTheme, setStoreTheme] = createLocalStore<{theme: Theme}>('theme', { theme: 'auto' })
+const [storeTheme, setStoreTheme] = createLocalStore<{ theme: Theme }>('theme', { theme: 'auto' })
 
-export const theme = () => storeTheme.theme == 'auto' ? getPrefersDark() : storeTheme.theme
+export const theme = () => (storeTheme.theme == 'auto' ? getPrefersDark() : storeTheme.theme)
 export const setTheme = (theme: Theme) => setStoreTheme({ theme })
 const html = document.querySelector('html')!
 
@@ -29,4 +28,4 @@ createRenderEffect(() => {
 })
 
 const prefersDark = usePrefersDark()
-const getPrefersDark = () => untrack(prefersDark) ? 'dark' : 'light'
+const getPrefersDark = () => (untrack(prefersDark) ? 'dark' : 'light')

@@ -1,26 +1,25 @@
-import {Observable, switchMap} from "rxjs";
-import {fromFetch} from "rxjs/internal/observable/dom/fetch";
-import {baseFetchRequest} from "./fetch";
+import { Observable, switchMap } from 'rxjs'
+import { fromFetch } from 'rxjs/internal/observable/dom/fetch'
+import { baseFetchRequest } from './fetch'
 
 export class SolutionService {
-    constructor(private baseURLMathCompetition: string) {
-    }
+  constructor(private baseURLMathCompetition: string) {}
 
-    setSolution({problem, solution}: {problem: string, solution: number | null}): Observable<void> {
-        return fromFetch(`${this.baseURLMathCompetition}/competition/solution`, {
-            ...baseFetchRequest(),
-            method: "POST",
-            body: JSON.stringify({
-                problem,
-                solution
-            })
-        }).pipe(
-            switchMap(async resp => {
-                if (!resp.ok) {
-                    const r = await resp.json()
-                    throw {code: r.code}
-                }
-            })
-        )
-    }
+  setSolution({ problem, solution }: { problem: string; solution: number | null }): Observable<void> {
+    return fromFetch(`${this.baseURLMathCompetition}/competition/solution`, {
+      ...baseFetchRequest(),
+      method: 'POST',
+      body: JSON.stringify({
+        problem,
+        solution,
+      }),
+    }).pipe(
+      switchMap(async (resp) => {
+        if (!resp.ok) {
+          const r = await resp.json()
+          throw { code: r.code }
+        }
+      })
+    )
+  }
 }

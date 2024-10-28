@@ -22,7 +22,7 @@ html {
 
 body {
   font-size: 1.6rem;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   color: var(--text-color);
   background: var(--background);
 }
@@ -40,4 +40,3 @@ main {
   background: var(--primary);
   color: var(--text-on-primary);
 }
-

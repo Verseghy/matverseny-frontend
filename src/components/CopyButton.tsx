@@ -42,7 +42,7 @@ export const CopyButton: Component<CopyButtonProps> = (props) => {
           <FaSolidCheck class={styles.success} />
         </Match>
         <Match when={state() === 'error'}>
-          <FaSolidXmark class={styles.error}/>
+          <FaSolidXmark class={styles.error} />
         </Match>
       </Switch>
     </Button>

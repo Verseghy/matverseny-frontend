@@ -1,19 +1,17 @@
-import { useNavigate } from "@solidjs/router"
-import { firstValueFrom } from "rxjs"
-import { Component, createSignal } from "solid-js"
+import { useNavigate } from '@solidjs/router'
+import { firstValueFrom } from 'rxjs'
+import { Component, createSignal } from 'solid-js'
 import * as Yup from 'yup'
-import { authService } from "../App"
-import Button from "../components/Button"
-import Card from "../components/Card"
-import ErrorMessage from "../components/ErrorMessage"
-import FormField from "../components/FormField"
+import { authService } from '../App'
+import Button from '../components/Button'
+import Card from '../components/Card'
+import ErrorMessage from '../components/ErrorMessage'
+import FormField from '../components/FormField'
 import styles from './Register.module.scss'
 
 const schema = Yup.object().shape({
   email: Yup.string().email('Az email formátuma nem megfelelő').required('Email kötelező'),
-  password: Yup.string()
-    .min(8, 'A jelszónak legalább 8 karakternek kell lennie')
-    .required('Jelszó kötelező'),
+  password: Yup.string().min(8, 'A jelszónak legalább 8 karakternek kell lennie').required('Jelszó kötelező'),
   passwordRe: Yup.string()
     .oneOf([Yup.ref('password')], 'Két jelszó nem egyezik')
     .required('Jelszó ismétlés kötelező'),
@@ -25,21 +23,20 @@ const schema = Yup.object().shape({
     .required('Évfolyam kötelező'),
 })
 
-
 const RegisterPage: Component = () => {
-  const [emailError, setEmailError] = createSignal('');
-  const [passwordError, setPasswordError] = createSignal('');
-  const [passwordReError, setPasswordReError] = createSignal('');
-  const [nameError, setNameError] = createSignal('');
-  const [schoolError, setSchoolError] = createSignal('');
-  const [classError, setClassError] = createSignal('');
+  const [emailError, setEmailError] = createSignal('')
+  const [passwordError, setPasswordError] = createSignal('')
+  const [passwordReError, setPasswordReError] = createSignal('')
+  const [nameError, setNameError] = createSignal('')
+  const [schoolError, setSchoolError] = createSignal('')
+  const [classError, setClassError] = createSignal('')
 
-  const [emailDirty, setEmailDirty] = createSignal(false);
-  const [passwordDirty, setPasswordDirty] = createSignal(false);
-  const [passwordReDirty, setPasswordReDirty] = createSignal(false);
-  const [nameDirty, setNameDirty] = createSignal(false);
-  const [schoolDirty, setSchoolDirty] = createSignal(false);
-  const [classDirty, setClassDirty] = createSignal(false);
+  const [emailDirty, setEmailDirty] = createSignal(false)
+  const [passwordDirty, setPasswordDirty] = createSignal(false)
+  const [passwordReDirty, setPasswordReDirty] = createSignal(false)
+  const [nameDirty, setNameDirty] = createSignal(false)
+  const [schoolDirty, setSchoolDirty] = createSignal(false)
+  const [classDirty, setClassDirty] = createSignal(false)
 
   let emailInput: HTMLInputElement
   let passwordInput: HTMLInputElement
@@ -215,12 +212,7 @@ const RegisterPage: Component = () => {
             onInput={validate}
           />
           <div class={styles.controls}>
-            <Button
-              class={styles.button}
-              kind="primary"
-              disabled={isPending()}
-              type="submit"
-            >
+            <Button class={styles.button} kind="primary" disabled={isPending()} type="submit">
               Regisztráció
             </Button>
           </div>

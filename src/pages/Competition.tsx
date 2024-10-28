@@ -12,8 +12,8 @@ import { Problem } from '../services/socket'
 import styles from './Competition.module.scss'
 
 type QuickProblemButtonProps = {
-  problem: Problem,
-  index: number,
+  problem: Problem
+  index: number
 }
 
 const QuickProblemButton: Component<QuickProblemButtonProps> = (props) => {
@@ -38,23 +38,17 @@ const QuickProblemButton: Component<QuickProblemButtonProps> = (props) => {
 }
 
 const PaginatorControls = <T,>(props: {
-  paginator: Paginator<T>,
+  paginator: Paginator<T>
 }) => {
   return (
     <div class={styles.paginator}>
-      <Button
-        disabled={props.paginator.current === 0}
-        onClick={props.paginator.prev}
-      >
+      <Button disabled={props.paginator.current === 0} onClick={props.paginator.prev}>
         <FaSolidChevronLeft />
       </Button>
       <span>
         {props.paginator.current + 1} / {props.paginator.last + 1}
       </span>
-      <Button
-        disabled={props.paginator.current === props.paginator.last}
-        onClick={props.paginator.next}
-      >
+      <Button disabled={props.paginator.current === props.paginator.last} onClick={props.paginator.next}>
         <FaSolidChevronRight />
       </Button>
     </div>
@@ -75,10 +69,14 @@ const CompetitionPage: Component<RouteSectionProps<void>> = () => {
     return d < 0 ? 0 : d
   }
 
-  createTimer(() => {
-    if (delay() === false || delay() > 0) return
-    navigate('/end')
-  }, 1000, setInterval)
+  createTimer(
+    () => {
+      if (delay() === false || delay() > 0) return
+      navigate('/end')
+    },
+    1000,
+    setInterval
+  )
 
   createEffect(() => {
     if (!claims()) navigate('/login')
@@ -88,7 +86,7 @@ const CompetitionPage: Component<RouteSectionProps<void>> = () => {
 
   const problems = from(socketService.problems())
 
-  const paginatedProblems = usePaginate(() => problems() ?? [], 10);
+  const paginatedProblems = usePaginate(() => problems() ?? [], 10)
 
   return (
     <div class={styles.container}>
@@ -103,29 +101,27 @@ const CompetitionPage: Component<RouteSectionProps<void>> = () => {
           Kijelentkezés
         </Button>
       </div>
-        <PaginatorControls paginator={paginatedProblems} />
-        <div class={styles.buttonsContainer}>
-          <For each={paginatedProblems()}>
-            {([problem, index]) => (
-              <QuickProblemButton problem={problem} index={index + 1} />
-            )}
-          </For>
-        </div>
+      <PaginatorControls paginator={paginatedProblems} />
+      <div class={styles.buttonsContainer}>
         <For each={paginatedProblems()}>
-          {([problem, index]) => (
-            <ProblemCard
-              id={`card_${problem.id}`}
-              class={styles.card}
-              index={index + 1}
-              problem={problem}
-              onAnswer={(answer) => {
-                console.log("answer", answer)
-                solutionService.setSolution({ problem: problem.id, solution: answer }).subscribe()
-              }}
-            />
-          )}
+          {([problem, index]) => <QuickProblemButton problem={problem} index={index + 1} />}
         </For>
-        <PaginatorControls paginator={paginatedProblems} />
+      </div>
+      <For each={paginatedProblems()}>
+        {([problem, index]) => (
+          <ProblemCard
+            id={`card_${problem.id}`}
+            class={styles.card}
+            index={index + 1}
+            problem={problem}
+            onAnswer={(answer) => {
+              console.log('answer', answer)
+              solutionService.setSolution({ problem: problem.id, solution: answer }).subscribe()
+            }}
+          />
+        )}
+      </For>
+      <PaginatorControls paginator={paginatedProblems} />
     </div>
   )
 }

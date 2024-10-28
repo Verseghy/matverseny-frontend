@@ -59,10 +59,7 @@ export const JoinTeam: Component<RouteSectionProps<void>> = () => {
               <ErrorMessage class={styles.errorMessage} code={errorCode()} />
             </Show>
             <div class={styles.join}>
-              <Input
-                placeholder="Csapatkód"
-                ref={joinCodeInput!}
-              />
+              <Input placeholder="Csapatkód" ref={joinCodeInput!} />
               <Button kind="primary" onClick={onJoin}>
                 Csatlakozás
               </Button>
@@ -75,11 +72,8 @@ export const JoinTeam: Component<RouteSectionProps<void>> = () => {
 }
 
 const createTeamScheme = Yup.object({
-  name: Yup.string()
-    .max(32, 'A név maximum 32 karakter hosszú lehet')
-    .required('Név megadása kötelező'),
+  name: Yup.string().max(32, 'A név maximum 32 karakter hosszú lehet').required('Név megadása kötelező'),
 })
-
 
 export const CreateTeam: Component<RouteSectionProps<void>> = () => {
   socketService.start()
@@ -194,9 +188,7 @@ export const ManageTeam: Component<RouteSectionProps<void>> = () => {
   let nameInput: HTMLInputElement
 
   const schema = Yup.object({
-    name: Yup.string()
-      .max(32, 'A név maximum 32 karakter hosszú lehet')
-      .required('A név nem lehet üres')
+    name: Yup.string().max(32, 'A név maximum 32 karakter hosszú lehet').required('A név nem lehet üres'),
   })
 
   const validate = async () => {
@@ -223,9 +215,11 @@ export const ManageTeam: Component<RouteSectionProps<void>> = () => {
     const value = await validate()
     if (value !== null) {
       try {
-        await firstValueFrom(teamService.update({
-          name: value!.name
-        }))
+        await firstValueFrom(
+          teamService.update({
+            name: value!.name,
+          })
+        )
       } catch (e: any) {
         setErrorCode(e.code)
       }
@@ -235,9 +229,11 @@ export const ManageTeam: Component<RouteSectionProps<void>> = () => {
 
   const changeLock = async (value: boolean) => {
     try {
-      await firstValueFrom(teamService.update({
-        locked: value,
-      }))
+      await firstValueFrom(
+        teamService.update({
+          locked: value,
+        })
+      )
       setErrorCode('')
     } catch (e: any) {
       setErrorCode(e.code)
@@ -266,18 +262,22 @@ export const ManageTeam: Component<RouteSectionProps<void>> = () => {
     const member = getMember(id)
     if (member?.rank === 'Member') {
       try {
-        await firstValueFrom(teamService.update({
-          co_owner: member.id,
-        }))
+        await firstValueFrom(
+          teamService.update({
+            co_owner: member.id,
+          })
+        )
         setErrorCode('')
       } catch (e: any) {
         setErrorCode(e.code)
       }
     } else if (member?.rank === 'CoOwner') {
       try {
-        await firstValueFrom(teamService.update({
-          co_owner: null,
-        }))
+        await firstValueFrom(
+          teamService.update({
+            co_owner: null,
+          })
+        )
         setErrorCode('')
       } catch (e: any) {
         setErrorCode(e.code)
@@ -312,7 +312,7 @@ export const ManageTeam: Component<RouteSectionProps<void>> = () => {
   const user = (): TeamMember | null => {
     const user_id = claims()?.sub
     if (!user_id) return null
-    return getMember(user_id.slice("UserID-".length))
+    return getMember(user_id.slice('UserID-'.length))
   }
 
   return (
@@ -343,11 +343,7 @@ export const ManageTeam: Component<RouteSectionProps<void>> = () => {
                 <div class={styles.renameTeam}>
                   <FormField block autofocus name="name" ref={nameInput!} />
                   <div class={styles.renameButtons}>
-                    <Button
-                      disabled={isPending()}
-                      type="submit"
-                      class={styles.submitRename}
-                    >
+                    <Button disabled={isPending()} type="submit" class={styles.submitRename}>
                       Átnevezés
                     </Button>
                     <Button onClick={() => setEditMode(false)}>
