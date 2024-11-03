@@ -207,8 +207,8 @@ export class SocketServiceSingleton {
 
       case 'UPDATE_TIME':
         this._time$.next({
-          start_time: new Date(event.data.start_time * 1000),
-          end_time: new Date(event.data.end_time * 1000),
+          start_time: new Date(event.data.start_time),
+          end_time: new Date(event.data.end_time),
         })
         break
       case 'SOLUTION_SET':
