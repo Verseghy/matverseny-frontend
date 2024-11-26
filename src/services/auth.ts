@@ -58,7 +58,7 @@ export class AuthService {
         return this.login({ email, password })
       }),
       switchMap(() => {
-        return fromFetch(`${this.baseURLMathCompetition}/register`, {
+        return fromFetch(`${this.baseURLMathCompetition}/v1/register`, {
           ...baseFetchRequest(),
           method: 'POST',
           body: JSON.stringify({

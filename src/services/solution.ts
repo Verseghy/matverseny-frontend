@@ -6,7 +6,7 @@ export class SolutionService {
   constructor(private baseURLMathCompetition: string) {}
 
   setSolution({ problem, solution }: { problem: string; solution: number | null }): Observable<void> {
-    return fromFetch(`${this.baseURLMathCompetition}/competition/solution`, {
+    return fromFetch(`${this.baseURLMathCompetition}/v1/competition/solution`, {
       ...baseFetchRequest(),
       method: 'POST',
       body: JSON.stringify({

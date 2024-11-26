@@ -6,7 +6,7 @@ export class TeamService {
   constructor(private baseURLMathCompetition: string) {}
 
   regenerateCode(): Observable<void> {
-    return fromFetch(`${this.baseURLMathCompetition}/team/code`, {
+    return fromFetch(`${this.baseURLMathCompetition}/v1/team/code`, {
       ...baseFetchRequest(),
       method: 'POST',
     }).pipe(
@@ -20,7 +20,7 @@ export class TeamService {
   }
 
   create({ name }: { name: string }): Observable<void> {
-    return fromFetch(`${this.baseURLMathCompetition}/team/create`, {
+    return fromFetch(`${this.baseURLMathCompetition}/v1/team/create`, {
       ...baseFetchRequest(),
       method: 'POST',
       body: JSON.stringify({
@@ -37,7 +37,7 @@ export class TeamService {
   }
 
   disband(): Observable<void> {
-    return fromFetch(`${this.baseURLMathCompetition}/team/disband`, {
+    return fromFetch(`${this.baseURLMathCompetition}/v1/team/disband`, {
       ...baseFetchRequest(),
       method: 'POST',
     }).pipe(
@@ -51,7 +51,7 @@ export class TeamService {
   }
 
   join({ code }: { code: string }): Observable<void> {
-    return fromFetch(`${this.baseURLMathCompetition}/team/join`, {
+    return fromFetch(`${this.baseURLMathCompetition}/v1/team/join`, {
       ...baseFetchRequest(),
       method: 'POST',
       body: JSON.stringify({
@@ -68,7 +68,7 @@ export class TeamService {
   }
 
   kick({ user }: { user: string }): Observable<void> {
-    return fromFetch(`${this.baseURLMathCompetition}/team/kick`, {
+    return fromFetch(`${this.baseURLMathCompetition}/v1/team/kick`, {
       ...baseFetchRequest(),
       method: 'POST',
       body: JSON.stringify({
@@ -85,7 +85,7 @@ export class TeamService {
   }
 
   leave(): Observable<void> {
-    return fromFetch(`${this.baseURLMathCompetition}/team/leave`, {
+    return fromFetch(`${this.baseURLMathCompetition}/v1/team/leave`, {
       ...baseFetchRequest(),
       method: 'POST',
     }).pipe(
@@ -104,7 +104,7 @@ export class TeamService {
     co_owner,
     locked,
   }: { name?: string; owner?: string; co_owner?: string | null; locked?: boolean }): Observable<void> {
-    return fromFetch(`${this.baseURLMathCompetition}/team`, {
+    return fromFetch(`${this.baseURLMathCompetition}/v1/team`, {
       ...baseFetchRequest(),
       method: 'PATCH',
       body: JSON.stringify({

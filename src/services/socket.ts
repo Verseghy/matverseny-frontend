@@ -101,7 +101,7 @@ export class SocketServiceSingleton {
       return
     }
     this.wsSubject = webSocket<BackendEvents>({
-      url: `${this.baseURL}/ws`,
+      url: `${this.baseURL}/v1/ws`,
       closeObserver: {
         next: (e) => {
           this.wsSubject = null
