@@ -12,7 +12,7 @@ const LandingPage: Component<RouteSectionProps<void>> = () => {
     <div class={styles.container}>
       <Card class={styles.card}>
         <h1>
-          Verseghy <span>193</span>
+          Verseghy <span>194</span>
         </h1>
         <p>
           A versenyzők az oldalon tudnak regisztrálni. A csapatvezető bejelentkezés után létre tud hozni csapatot. A
