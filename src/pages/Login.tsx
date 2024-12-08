@@ -91,7 +91,7 @@ const LoginPage: Component<RouteSectionProps<void>> = () => {
           <img src="/assets/logo.svg" alt="" class={styles.logo} />
           <h1>Bejelentkezés</h1>
           <h2>
-            A <span>193</span> matematikaverseny oldalára
+            A <span>194</span> matematikaverseny oldalára
           </h2>
           <ErrorMessage code={errorCode()} />
           <FormField
