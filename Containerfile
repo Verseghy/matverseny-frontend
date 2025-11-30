@@ -1,19 +1,18 @@
-FROM docker.io/library/node:20-slim AS base
+FROM registry.access.redhat.com/ubi10/nodejs-24 AS base
+
+WORKDIR /pnpm
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
-COPY . /app
+RUN curl -fsSL https://get.pnpm.io/install.sh | bash -
+COPY --chown=1001 . /app
 WORKDIR /app
 
-FROM base AS prod-deps
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+RUN pnpm install --frozen-lockfile && \
+    pnpm run build
 
-FROM base AS build
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
-RUN pnpm run build
-
-FROM docker.io/library/nginx:alpine
-RUN rm -rf /usr/share/nginx/html/*
-COPY nginx.conf /etc/nginx/nginx.conf
+FROM registry.access.redhat.com/ubi10/nginx-126
+COPY nginx.conf ${NGINX_CONF_PATH}
 COPY mime.types /etc/nginx/mime.types
-COPY --from=build /app/dist /usr/share/nginx/html/
+COPY --from=base /app/dist /app
+
+CMD ["nginx", "-g", "daemon off;"]
