@@ -1,7 +1,7 @@
 #!/usr/bin/env -S just --justfile
 
 image_base := "ghcr.io/verseghy"
-image_tag := "v1"
+image_tag := "v3"
 
 _default:
   @just --list --unsorted
