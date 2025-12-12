@@ -34,6 +34,8 @@ const TRANSLATIONS: { [key: string]: string } = {
   M029: 'insufficient permissions',
   M030: 'failed to get name of the user from the iam',
   M031: 'seconds are out of range',
+  M032: 'nats error',
+  M033: 'A csapat maximum létszáma elérve',
 
   I000: 'internal server error',
   I001: 'internal server error',
